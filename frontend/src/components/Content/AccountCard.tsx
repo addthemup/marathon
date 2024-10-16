@@ -2,7 +2,28 @@ import { Card, Image, Text, Group, Badge, Center, Button, Box } from '@mantine/c
 import { IconBuildingSkyscraper, IconMapPin, IconAt, IconPhone } from '@tabler/icons-react';
 import classes from './AccountCard.module.css';
 
-const AccountCard = ({ accountData }) => {
+// Define the TypeScript interface for accountData
+interface AccountData {
+  name: string;
+  logo?: string;
+  customer_number: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  email?: string;
+  phone_number?: string;
+  total_invoices: number;
+  gross_sum?: number;
+  average_time_between_sales?: number;
+  time_since_last_purchase?: number;
+}
+
+interface AccountCardProps {
+  accountData: AccountData;
+}
+
+const AccountCard: React.FC<AccountCardProps> = ({ accountData }) => {
   const logoUrl = accountData.logo ? `http://localhost:8000${accountData.logo}` : 'https://via.placeholder.com/100';
   
   const features = [
@@ -61,7 +82,7 @@ const AccountCard = ({ accountData }) => {
               Avg. Time Between Sales
             </Text>
             <Text fz="xs" c="dimmed" fw={500} style={{ lineHeight: 1 }} mt={2}>
-              {accountData.average_time_between_sales !== null ? `${accountData.average_time_between_sales.toFixed(2)} days` : 'N/A'}
+              {accountData.average_time_between_sales !== null ? `${accountData.average_time_between_sales?.toFixed(2)} days` : 'N/A'}
             </Text>
           </Box>
           <Box>
