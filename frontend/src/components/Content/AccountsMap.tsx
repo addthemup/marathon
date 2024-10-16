@@ -20,9 +20,49 @@ const defaultCenter = {
 
 const defaultZoom = 6;
 
-function SalesRepCheckbox({ checked, onChange, fullName, profilePic }) {
+// Define types for component props
+interface SalesRepCheckboxProps {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  fullName: string;
+  profilePic: string;
+}
+
+// Define type for Account data
+interface AccountData {
+  id: number;
+  name: string;
+  customer_number: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  email?: string;
+  phone_number?: string;
+  total_invoices: number;
+  gross_sum?: number;
+  sales_rep?: {
+    id: number;
+    full_name: string;
+    profile_pic?: string;
+  };
+}
+
+interface MarkerData {
+  id: number;
+  name: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
+  salesRep?: {
+    id: number;
+  };
+}
+
+function SalesRepCheckbox({ checked, onChange, fullName, profilePic }: SalesRepCheckboxProps) {
   return (
-    <Paper shadow="sm" padding="md">
+    <Paper shadow="sm" p="md">
       <UnstyledButton onClick={() => onChange(!checked)} className={classes.button} data-checked={checked || undefined}>
         <Avatar src={profilePic || 'default-placeholder.png'} alt={fullName} width={40} height={40} />
         <div className={classes.body}>
@@ -35,25 +75,25 @@ function SalesRepCheckbox({ checked, onChange, fullName, profilePic }) {
 }
 
 export function AccountsMap() {
-  const [accounts, setAccounts] = useState([]);
-  const [geocodedMarkers, setGeocodedMarkers] = useState([]);
+  const [accounts, setAccounts] = useState<AccountData[]>([]);
+  const [geocodedMarkers, setGeocodedMarkers] = useState<MarkerData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [salesReps, setSalesReps] = useState([]);  // Store unique sales reps
-  const [selectedSalesReps, setSelectedSalesReps] = useState([]);  // Selected sales rep filter (multiple)
-  const mapRef = useRef(null);  // Reference to the map object
+  const [error, setError] = useState<string | null>(null);
+  const [salesReps, setSalesReps] = useState<SalesRepCheckboxProps[]>([]);
+  const [selectedSalesReps, setSelectedSalesReps] = useState<number[]>([]);
+  const mapRef = useRef<google.maps.Map | null>(null);
 
-  const saveToLocalStorage = (key, data) => {
+  const saveToLocalStorage = (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data));
   };
 
-  const loadFromLocalStorage = (key) => {
+  const loadFromLocalStorage = (key: string) => {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   };
 
-  const geocodeAccounts = useCallback(async (accountsData) => {
-    const markers = [];
+  const geocodeAccounts = useCallback(async (accountsData: AccountData[]) => {
+    const markers: MarkerData[] = [];
 
     for (const account of accountsData) {
       const address = `${account.address}, ${account.city}, ${account.state}, ${account.zip_code}`;
@@ -118,20 +158,22 @@ export function AccountsMap() {
     loadAccounts();
   }, [geocodeAccounts]);
 
-  const populateSalesReps = (accountsData) => {
+  const populateSalesReps = (accountsData: AccountData[]) => {
     const uniqueSalesReps = accountsData
       .filter(account => account.sales_rep && account.sales_rep.id)
       .map(account => ({
-        id: account.sales_rep.id,
-        full_name: account.sales_rep.full_name,
-        profile_pic: account.sales_rep.profile_pic || 'default-placeholder.png',
+        id: account.sales_rep!.id,
+        fullName: account.sales_rep!.full_name,
+        profilePic: account.sales_rep!.profile_pic || 'default-placeholder.png',
+        checked: false,
+        onChange: (checked: boolean) => handleSalesRepSelection(account.sales_rep!.id, checked),
       }))
       .filter((value, index, self) => self.findIndex(rep => rep.id === value.id) === index);
 
     setSalesReps(uniqueSalesReps);
   };
 
-  const fitMapToBounds = (markers) => {
+  const fitMapToBounds = (markers: MarkerData[]) => {
     const bounds = new window.google.maps.LatLngBounds();
     markers.forEach((marker) => {
       bounds.extend(new window.google.maps.LatLng(marker.position.lat, marker.position.lng));
@@ -141,8 +183,8 @@ export function AccountsMap() {
     }
   };
 
-  const handleSalesRepSelection = (id, isChecked) => {
-    setSelectedSalesReps(prevSelected => {
+  const handleSalesRepSelection = (id: number, isChecked: boolean) => {
+    setSelectedSalesReps((prevSelected) => {
       const updatedSelected = isChecked
         ? [...prevSelected, id]
         : prevSelected.filter(repId => repId !== id);
@@ -153,7 +195,7 @@ export function AccountsMap() {
   };
 
   const filteredMarkers = selectedSalesReps.length > 0
-    ? geocodedMarkers.filter(marker => selectedSalesReps.includes(marker.salesRep?.id))
+    ? geocodedMarkers.filter(marker => selectedSalesReps.includes(marker.salesRep?.id!))
     : geocodedMarkers;
 
   if (loading || geocodedMarkers.length === 0) {
@@ -175,8 +217,8 @@ export function AccountsMap() {
           {salesReps.map((rep) => (
             <SalesRepCheckbox
               key={rep.id}
-              fullName={rep.full_name}
-              profilePic={rep.profile_pic}
+              fullName={rep.fullName}
+              profilePic={rep.profilePic}
               checked={selectedSalesReps.includes(rep.id)}
               onChange={(isChecked) => handleSalesRepSelection(rep.id, isChecked)}
             />
