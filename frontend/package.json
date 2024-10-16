@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "prebuild": "tsc --noEmit || true", 
+    "prebuild": "tsc --noEmit || true",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -16,6 +16,7 @@
     "@mantine/charts": "^7.12.2",
     "@mantine/core": "^7.12.2",
     "@mantine/dates": "^7.13.2",
+    "@mantine/hooks": "^7.13.2",
     "@mantine/modals": "^7.13.2",
     "@mantine/notifications": "^7.13.2",
     "@mui/icons-material": "^6.1.3",
