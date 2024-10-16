@@ -3,7 +3,7 @@ from users.models import UserProfile  # Assuming this is your custom user model
 
 class SalesRep(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)  # Link to the user model
-    code = models.CharField(max_length=10, unique=True)  # Unique sales rep code
+    code = models.CharField(max_length=25, unique=True)  # Unique sales rep code
     profile_pic = models.ImageField(upload_to='sales_reps/profile_pics/', null=True, blank=True)  # Profile picture
     role = models.CharField(max_length=50, null=True, blank=True)  # Optional role field (e.g., "Manager", "Field Rep")
     region = models.CharField(max_length=100, null=True, blank=True)

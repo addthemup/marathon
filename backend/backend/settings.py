@@ -67,10 +67,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Switch to PostgreSQL when ready
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'marathon',
+        'USER': 'awc',
+        'PASSWORD': 'Starbury03',
+        'HOST': 'localhost',  # or '127.0.0.1'
+        'PORT': '5432',
     }
 }
+
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
