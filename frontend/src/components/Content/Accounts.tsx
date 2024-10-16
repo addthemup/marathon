@@ -5,8 +5,27 @@ import { Table, ScrollArea, Select, LoadingOverlay, Text, TextInput, Group, Pagi
 import classes from './Accounts.module.css';
 import cx from 'clsx';
 
+// Define types for the account and sales rep objects
+interface SalesRep {
+  id: number;
+  full_name: string;
+}
+
+interface Account {
+  id: number;
+  name: string;
+  customer_number: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  total_invoices: number;
+  gross_sum: number;
+  sales_rep: SalesRep | null;
+}
+
 // Helper function to load from localStorage
-const loadFromLocalStorage = (key) => {
+const loadFromLocalStorage = (key: string): any => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 };
@@ -14,12 +33,12 @@ const loadFromLocalStorage = (key) => {
 export function Accounts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [accounts, setAccounts] = useState([]);
-  const [salesReps, setSalesReps] = useState([]);
+  const [accounts, setAccounts] = useState<Account[]>([]); // Typed as Account[]
+  const [salesReps, setSalesReps] = useState<SalesRep[]>([]); // Typed as SalesRep[]
   const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
-  const [filteredAccounts, setFilteredAccounts] = useState([]); // To store filtered accounts
-  const [selectedSalesReps, setSelectedSalesReps] = useState([]); // Selected Sales Reps from localStorage
+  const [filteredAccounts, setFilteredAccounts] = useState<Account[]>([]); // Typed as Account[]
+  const [selectedSalesReps, setSelectedSalesReps] = useState<number[]>([]); // Typed as number[]
   const [currentPage, setCurrentPage] = useState(1); // State for pagination
   const rowsPerPage = 18; // Number of rows (accounts) per page
 
@@ -94,7 +113,7 @@ export function Accounts() {
   };
 
   // Function to handle clicking on the account name
-  const handleAccountClick = (account) => {
+  const handleAccountClick = (account: Account) => {
     // Store the selected account in localStorage to pass data
     localStorage.setItem('selectedAccount', JSON.stringify(account));
 
@@ -118,8 +137,8 @@ export function Accounts() {
     const isHighlighted = account.sales_rep && selectedSalesReps.includes(account.sales_rep.id); // Check if the account's sales rep is selected
 
     return (
-      <Table.Tr key={account.id} className={cx({ [classes.highlightedRow]: isHighlighted })}>
-        <Table.Td>
+      <tr key={account.id} className={cx({ [classes.highlightedRow]: isHighlighted })}>
+        <td>
           {/* Make Account Name clickable */}
           <Text
             component="a"
@@ -128,12 +147,12 @@ export function Accounts() {
           >
             {account.name}
           </Text>
-        </Table.Td>
-        <Table.Td>{account.customer_number}</Table.Td>
-        <Table.Td>{`${account.address}, ${account.city}, ${account.state} ${account.zip_code}`}</Table.Td>
-        <Table.Td>{account.total_invoices}</Table.Td>
-        <Table.Td>${account.gross_sum.toFixed(2)}</Table.Td>
-        <Table.Td>
+        </td>
+        <td>{account.customer_number}</td>
+        <td>{`${account.address}, ${account.city}, ${account.state} ${account.zip_code}`}</td>
+        <td>{account.total_invoices}</td>
+        <td>${account.gross_sum.toFixed(2)}</td>
+        <td>
           <Select
             value={account.sales_rep?.id?.toString() || ''}
             onChange={(newSalesRepId) => handleSalesRepChange(account.id, newSalesRepId)}
@@ -143,8 +162,8 @@ export function Accounts() {
             searchable
             disabled={loading}
           />
-        </Table.Td>
-      </Table.Tr>
+        </td>
+      </tr>
     );
   });
 
@@ -164,17 +183,17 @@ export function Accounts() {
 
       <ScrollArea style={{ height: '90%', width: '100%' }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
         <Table style={{ minWidth: '100%', width: '100%' }}>
-          <Table.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
-            <Table.Tr>
-              <Table.Th>Account Name</Table.Th>
-              <Table.Th>Customer Number</Table.Th>
-              <Table.Th>Address</Table.Th>
-              <Table.Th>Total Invoices</Table.Th>
-              <Table.Th>Gross Sum</Table.Th>
-              <Table.Th>Sales Rep</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
+          <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
+            <tr>
+              <th>Account Name</th>
+              <th>Customer Number</th>
+              <th>Address</th>
+              <th>Total Invoices</th>
+              <th>Gross Sum</th>
+              <th>Sales Rep</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
         </Table>
       </ScrollArea>
 
