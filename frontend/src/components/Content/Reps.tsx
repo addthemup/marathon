@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Text, LoadingOverlay, Grid, Card, Title } from '@mantine/core';
+import { Text, LoadingOverlay, Grid, Card } from '@mantine/core';
 import RepsMap from './RepsMap';  // Import RepsMap to display the map
 import RepsCheckbox from './RepsCheckbox';  // Import RepsCheckbox for selecting reps
 import RepCard from './RepCard';  // Import the RepCard component

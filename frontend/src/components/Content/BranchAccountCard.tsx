@@ -1,5 +1,5 @@
-import { Card, Text, Group, Badge, Center, Button } from '@mantine/core';
-import { IconBuildingSkyscraper, IconMapPin, IconAt, IconPhone } from '@tabler/icons-react';
+import { Card, Text, Group, Badge, Center } from '@mantine/core';
+import { IconMapPin, IconAt, IconPhone } from '@tabler/icons-react';
 import classes from './AccountCard.module.css';
 
 interface BranchAccountCardProps {

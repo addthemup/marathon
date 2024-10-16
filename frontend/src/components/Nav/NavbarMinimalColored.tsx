@@ -1,6 +1,6 @@
 import { useState, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Center, Tooltip, UnstyledButton, Box, rem } from '@mantine/core';  // Import rem from Mantine
+import { Tooltip, UnstyledButton, Box, rem } from '@mantine/core';  // Import rem from Mantine
 import {
   IconHome2,
   IconGauge,
@@ -13,7 +13,6 @@ import {
   IconFriends,
   IconSeeding,
 } from '@tabler/icons-react';
-import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
 import classes from './NavbarMinimalColored.module.css';
 
 interface NavbarLinkProps {

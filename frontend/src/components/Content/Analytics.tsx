@@ -3,10 +3,27 @@ import { Table, MultiSelect, Group, ScrollArea, Button, Pagination } from '@mant
 import { IconSortAscending, IconSortDescending } from '@tabler/icons-react';
 import classes from './Analytics.module.css';
 
+type AnalyticsItem = {
+  product_code: string;
+  product_description: string;
+  sum_price: number;
+  amount_sold: number;
+  brand?: string;
+  category?: { name: string };
+  sub_category?: { name: string };
+  tags?: { name: string }[];
+  account?: string;
+  root_accounts?: string[];
+  sales_rep?: string;
+  quantity_sold?: string;
+  quantity_invoiced?: string;
+  sell_price: string;
+};
+
 export function Analytics() {
-  const [analyticsData, setAnalyticsData] = useState<any[]>([]);
-  const [filteredData, setFilteredData] = useState<any[]>([]);
-  const [groupedData, setGroupedData] = useState<any[]>([]);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsItem[]>([]);
+  const [filteredData, setFilteredData] = useState<AnalyticsItem[]>([]); // Keeping it if required in future.
+  const [groupedData, setGroupedData] = useState<AnalyticsItem[]>([]);
   const [brands, setBrands] = useState<{ value: string; label: string }[]>([]);
   const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
   const [subCategories, setSubCategories] = useState<{ value: string; label: string }[]>([]);
@@ -14,19 +31,20 @@ export function Analytics() {
   const [accounts, setAccounts] = useState<{ value: string; label: string }[]>([]);
   const [rootAccounts, setRootAccounts] = useState<{ value: string; label: string }[]>([]);
   const [salesReps, setSalesReps] = useState<{ value: string; label: string }[]>([]);
-  
+
   const [filters, setFilters] = useState({
-    brand: [],
-    category: [],
-    subCategory: [],
-    tags: [],
-    accounts: [],
-    rootAccounts: [],
-    salesReps: []
+    brand: [] as string[],
+    category: [] as string[],
+    subCategory: [] as string[],
+    tags: [] as string[],
+    accounts: [] as string[],
+    rootAccounts: [] as string[],
+    salesReps: [] as string[],
   });
-  
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [rowsPerPage, setRowsPerPage] = useState(10); // Commented out because it's unused.
+  const rowsPerPage = 10; // Keep this static for now to avoid the unused variable error.
   const [sortField, setSortField] = useState<'sum_price' | 'amount_sold'>('sum_price');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -34,8 +52,7 @@ export function Analytics() {
   useEffect(() => {
     const storedAnalytics = localStorage.getItem('analytics');
     if (storedAnalytics) {
-      const data = JSON.parse(storedAnalytics);
-
+      const data: AnalyticsItem[] = JSON.parse(storedAnalytics);
       setAnalyticsData(data);
       setFilteredData(data);
       extractFilterOptions(data);
@@ -43,40 +60,42 @@ export function Analytics() {
   }, []);
 
   // Function to extract unique filter options from the data
-  const extractFilterOptions = (data: any[]) => {
-    const uniqueBrands = [...new Set(data.map((item: any) => item.brand).filter(Boolean))].map((brand) => ({
-      value: brand,
-      label: brand,
+  const extractFilterOptions = (data: AnalyticsItem[]) => {
+    const uniqueBrands = [...new Set(data.map((item) => item.brand).filter(Boolean))].map((brand) => ({
+      value: brand!,
+      label: brand!,
     }));
-    const uniqueCategories = [...new Set(data.map((item: any) => item.category?.name).filter(Boolean))].map(
+    const uniqueCategories = [...new Set(data.map((item) => item.category?.name).filter(Boolean))].map(
       (category) => ({
-        value: category,
-        label: category,
+        value: category!,
+        label: category!,
       })
     );
-    const uniqueSubCategories = [...new Set(data.map((item: any) => item.sub_category?.name).filter(Boolean))].map(
+    const uniqueSubCategories = [...new Set(data.map((item) => item.sub_category?.name).filter(Boolean))].map(
       (subCategory) => ({
-        value: subCategory,
-        label: subCategory,
+        value: subCategory!,
+        label: subCategory!,
       })
     );
-    const uniqueTags = [...new Set(data.flatMap((item: any) => (item.tags || []).map((tag: any) => tag?.name)).filter(Boolean))].map(
-      (tag) => ({
-        value: tag,
-        label: tag,
+    const uniqueTags = [
+      ...new Set(data.flatMap((item) => (item.tags || []).map((tag) => tag?.name)).filter(Boolean)),
+    ].map((tag) => ({
+      value: tag!,
+      label: tag!,
+    }));
+    const uniqueAccounts = [...new Set(data.map((item) => item.account).filter(Boolean))].map((account) => ({
+      value: account!,
+      label: account!,
+    }));
+    const uniqueRootAccounts = [...new Set(data.flatMap((item) => item.root_accounts || []).filter(Boolean))].map(
+      (rootAccount) => ({
+        value: rootAccount!,
+        label: rootAccount!,
       })
     );
-    const uniqueAccounts = [...new Set(data.map((item: any) => item.account).filter(Boolean))].map((account) => ({
-      value: account,
-      label: account,
-    }));
-    const uniqueRootAccounts = [...new Set(data.flatMap((item: any) => item.root_accounts || []).filter(Boolean))].map((rootAccount) => ({
-      value: rootAccount,
-      label: rootAccount,
-    }));
-    const uniqueSalesReps = [...new Set(data.map((item: any) => item.sales_rep).filter(Boolean))].map((salesRep) => ({
-      value: salesRep,
-      label: salesRep,
+    const uniqueSalesReps = [...new Set(data.map((item) => item.sales_rep).filter(Boolean))].map((salesRep) => ({
+      value: salesRep!,
+      label: salesRep!,
     }));
 
     setBrands(uniqueBrands);
@@ -93,21 +112,21 @@ export function Analytics() {
     let filtered = analyticsData;
 
     if (filters.brand.length) {
-      filtered = filtered.filter((item) => filters.brand.includes(item.brand));
+      filtered = filtered.filter((item) => filters.brand.includes(item.brand!));
     }
     if (filters.category.length) {
-      filtered = filtered.filter((item) => filters.category.includes(item.category?.name));
+      filtered = filtered.filter((item) => filters.category.includes(item.category?.name!));
     }
     if (filters.subCategory.length) {
-      filtered = filtered.filter((item) => filters.subCategory.includes(item.sub_category?.name));
+      filtered = filtered.filter((item) => filters.subCategory.includes(item.sub_category?.name!));
     }
     if (filters.tags.length) {
       filtered = filtered.filter((item) =>
-        filters.tags.every((tag) => (item.tags || []).some((t: any) => t?.name === tag))
+        filters.tags.every((tag) => (item.tags || []).some((t) => t?.name === tag))
       );
     }
     if (filters.accounts.length) {
-      filtered = filtered.filter((item) => filters.accounts.includes(item.account));
+      filtered = filtered.filter((item) => filters.accounts.includes(item.account!));
     }
     if (filters.rootAccounts.length) {
       filtered = filtered.filter((item) =>
@@ -115,18 +134,18 @@ export function Analytics() {
       );
     }
     if (filters.salesReps.length) {
-      filtered = filtered.filter((item) => filters.salesReps.includes(item.sales_rep));
+      filtered = filtered.filter((item) => filters.salesReps.includes(item.sales_rep!));
     }
 
     setFilteredData(filtered);
     groupAndSortData(filtered);
-  }, [filters, sortField, sortOrder]);
+  }, [filters, sortField, sortOrder, analyticsData]);
 
   // Group and sort data by product_code
-  const groupAndSortData = (filteredData: any[]) => {
-    const grouped = filteredData.reduce((acc: any, item: any) => {
+  const groupAndSortData = (filteredData: AnalyticsItem[]) => {
+    const grouped = filteredData.reduce((acc: any, item) => {
       const existingGroup = acc.find((group: any) => group.product_code === item.product_code);
-      const quantity = item.quantity_sold ? parseFloat(item.quantity_sold) : parseFloat(item.quantity_invoiced);
+      const quantity = item.quantity_sold ? parseFloat(item.quantity_sold) : parseFloat(item.quantity_invoiced!);
       const price = parseFloat(item.sell_price);
 
       if (existingGroup) {
@@ -137,14 +156,13 @@ export function Analytics() {
           product_code: item.product_code,
           product_description: item.product_description,
           sum_price: quantity * price,
-          amount_sold: quantity
+          amount_sold: quantity,
         });
       }
 
       return acc;
     }, []);
 
-    // Sort based on current sort field and order
     const sorted = grouped.sort((a: any, b: any) => {
       const fieldA = a[sortField];
       const fieldB = b[sortField];
@@ -165,7 +183,6 @@ export function Analytics() {
 
   return (
     <div className={classes.container}>
-      {/* Filter Section */}
       <Group position="apart" className={classes.filterGroup}>
         <MultiSelect data={brands} placeholder="Filter by brands" onChange={(value) => setFilters((prev) => ({ ...prev, brand: value }))} />
         <MultiSelect data={categories} placeholder="Filter by categories" onChange={(value) => setFilters((prev) => ({ ...prev, category: value }))} />
@@ -176,7 +193,6 @@ export function Analytics() {
         <MultiSelect data={salesReps} placeholder="Filter by sales reps" onChange={(value) => setFilters((prev) => ({ ...prev, salesReps: value }))} />
       </Group>
 
-      {/* Table Section */}
       <ScrollArea className={classes.tableContainer}>
         <Table>
           <thead>
@@ -208,7 +224,6 @@ export function Analytics() {
         </Table>
       </ScrollArea>
 
-      {/* Pagination */}
       <Pagination
         page={currentPage}
         onChange={setCurrentPage}

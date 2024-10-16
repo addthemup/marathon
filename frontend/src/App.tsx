@@ -16,7 +16,7 @@ import { LogoHeader } from './components/Content/LogoHeader';
 import styles from './App.module.css';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState(() => localStorage.getItem('currentView') || 'home');
+  const [currentView, setCurrentView] = useState<string>(() => localStorage.getItem('currentView') || 'home');
   const [username, setUsername] = useState<string | null>(null);
 
   const handleViewChange = (view: string) => {
@@ -33,16 +33,17 @@ export default function App() {
   }, []);
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider withGlobalStyles={true} withNormalizeCSS={true}>
       <ModalsProvider>
         <Router>
           <div className={styles.appContainer}>
-          <div className={styles.logoHeaderContainer}>
+            <div className={styles.logoHeaderContainer}>
               <LogoHeader />
             </div>
+
             {/* Header */}
             <div className={styles.headerContainer}>
-              <HeaderMegaMenu />
+              <HeaderMegaMenu onViewChange={handleViewChange} />
             </div>
 
             {/* Main content area with Nav, Content, and InfoBar */}

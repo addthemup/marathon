@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Text, Card, Title } from '@mantine/core';
+import { Table, Text, Card } from '@mantine/core';
 
 interface BranchAccount {
   branch_account: {

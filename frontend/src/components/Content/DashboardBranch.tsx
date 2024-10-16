@@ -1,5 +1,4 @@
 import { Table, Progress, Anchor, Text, Group, Avatar } from '@mantine/core';
-import { Fragment } from 'react';
 import classes from './DashboardBranch.module.css';
 
 interface BranchAccount {

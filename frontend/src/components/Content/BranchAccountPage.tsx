@@ -6,7 +6,6 @@ import { BranchAccountCard } from './BranchAccountCard';
 import { BranchAccountMap } from './BranchAccountMap';
 import { BranchAccountHead } from './BranchAccountHead'; // Import BranchAccountHead
 import BranchAccountInvoices from './BranchAccountInvoices'; // Import BranchAccountInvoices
-import { BranchAccountPageChart } from './BranchAccountPageChart';
 
 // Define the structure for the fetched sales invoice data
 interface SalesInvoice {

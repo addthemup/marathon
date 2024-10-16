@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, ScrollArea, Paper, Text, Button, Group, Collapse, Pagination } from '@mantine/core';
+import { Table, ScrollArea, Paper, Button, Group, Collapse, Pagination } from '@mantine/core';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 
 interface BranchAccountInvoicesProps {

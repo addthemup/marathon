@@ -43,7 +43,7 @@ export function Accounts() {
         setSelectedSalesReps(selectedRepsFromStorage);
 
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError('Failed to load data');
         setLoading(false);
       }
@@ -87,7 +87,7 @@ export function Accounts() {
       setAccounts(updatedAccounts);
       setFilteredAccounts(updatedAccounts); // Update filtered accounts after change
       setLoading(false);
-    } catch (err) {
+    } catch {
       setError('Failed to update sales rep');
       setLoading(false);
     }

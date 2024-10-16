@@ -1,4 +1,4 @@
-import { UnstyledButton, Group, Avatar, Text, SimpleGrid, Paper, rem } from '@mantine/core';
+import { UnstyledButton, Group, Avatar, Text, SimpleGrid, rem } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import styles from './RepsCheckbox.module.css';
 
