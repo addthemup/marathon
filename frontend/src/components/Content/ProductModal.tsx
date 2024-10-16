@@ -1,5 +1,22 @@
 import { Modal, TextInput, Button, Select } from '@mantine/core';
 
+// Define types for props
+interface ProductModalProps {
+  modalOpened: boolean;
+  modalType: 'Category' | 'Subcategory' | 'Tag';
+  newCategory: string;
+  setNewCategory: (value: string) => void;
+  newSubCategory: { category: string; subCategory: string };
+  setNewSubCategory: (value: (prev: { category: string; subCategory: string }) => { category: string; subCategory: string }) => void;
+  newTag: string;
+  setNewTag: (value: string) => void;
+  categories: string[];
+  handleSubmitNewCategory: () => void;
+  handleSubmitNewSubCategory: () => void;
+  handleSubmitNewTag: () => void;
+  onClose: () => void;
+}
+
 export function ProductModal({
   modalOpened,
   modalType,
@@ -14,14 +31,15 @@ export function ProductModal({
   handleSubmitNewSubCategory,
   handleSubmitNewTag,
   onClose,
-}) {
+}: ProductModalProps) {
+  // Handle form submission based on modalType
   const handleSubmit = () => {
     if (modalType === 'Category') {
-      handleSubmitNewCategory(); // Call the correct handler
+      handleSubmitNewCategory();
     } else if (modalType === 'Subcategory') {
-      handleSubmitNewSubCategory(); // Call the correct handler
+      handleSubmitNewSubCategory();
     } else if (modalType === 'Tag') {
-      handleSubmitNewTag(); // Call the correct handler
+      handleSubmitNewTag();
     }
   };
 

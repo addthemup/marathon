@@ -1,35 +1,68 @@
 import { useState, useEffect } from 'react';
 import { Table, Checkbox, Select, MultiSelect, Pagination, ScrollArea } from '@mantine/core';
 import classes from './ProductTable.module.css';
-import { memo } from 'react'; // Memoize row component to optimize re-renders
+import { memo } from 'react';
+
+// Define types for the product, categories, subCategories, and tags
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface SubCategory {
+  id: number;
+  name: string;
+}
+
+interface Tag {
+  id: number;
+  name: string;
+}
+
+interface Product {
+  id: number;
+  product_code: string;
+  product_description: string;
+  brand: string;
+  category?: Category;
+  sub_category?: SubCategory;
+  tags: Tag[];
+}
+
+// Define types for the ProductRow props
+interface ProductRowProps {
+  product: Product;
+  categories: Category[];
+  subCategories: SubCategory[];
+  tags: Tag[];
+  handleRowSelection: (productId: number) => void;
+  handleFieldChange: (field: string, value: string | string[]) => void;
+  handleSingleFieldChange: (productId: number, field: string, value: string | string[]) => void;
+  selectedRows: number[];
+  isSelected: boolean;
+}
 
 // Memoized Row Component to avoid re-rendering of unaltered rows
-const ProductRow = memo(({ 
-  product, 
-  categories, 
-  subCategories, 
-  tags, 
-  handleRowSelection, 
-  handleFieldChange, 
-  handleSingleFieldChange, 
-  selectedRows, 
-  isSelected 
-}) => {
+const ProductRow = memo(({
+  product,
+  categories,
+  subCategories,
+  tags,
+  handleRowSelection,
+  handleFieldChange,
+  handleSingleFieldChange,
+  selectedRows,
+  isSelected,
+}: ProductRowProps) => {
   return (
     <Table.Tr key={product.id} className={isSelected ? classes.highlightedRow : ''}>
-      {/* Checkbox for row selection */}
       <Table.Td>
         <Checkbox checked={isSelected} onChange={() => handleRowSelection(product.id)} />
       </Table.Td>
-
-      {/* Product details */}
       <Table.Td>{product.product_code}</Table.Td>
       <Table.Td>{product.product_description}</Table.Td>
-
-      {/* Brand is static */}
       <Table.Td>{product.brand || 'N/A'}</Table.Td>
 
-      {/* Category Select */}
       <Table.Td>
         <Select
           data={categories.map((category) => ({
@@ -37,17 +70,16 @@ const ProductRow = memo(({
             label: category.name,
           }))}
           value={product.category ? product.category.id.toString() : ''}
-          onChange={(value) => 
+          onChange={(value) =>
             selectedRows.includes(product.id)
-              ? handleFieldChange('category_id', value) // Change all selected rows
-              : handleSingleFieldChange(product.id, 'category_id', value) // Change only this row
+              ? handleFieldChange('category_id', value!)
+              : handleSingleFieldChange(product.id, 'category_id', value!)
           }
           placeholder="Select category"
           nothingFound="No categories"
         />
       </Table.Td>
 
-      {/* Subcategory Select */}
       <Table.Td>
         <Select
           data={subCategories.map((subCategory) => ({
@@ -55,17 +87,16 @@ const ProductRow = memo(({
             label: subCategory.name,
           }))}
           value={product.sub_category ? product.sub_category.id.toString() : ''}
-          onChange={(value) => 
+          onChange={(value) =>
             selectedRows.includes(product.id)
-              ? handleFieldChange('sub_category_id', value) // Change all selected rows
-              : handleSingleFieldChange(product.id, 'sub_category_id', value) // Change only this row
+              ? handleFieldChange('sub_category_id', value!)
+              : handleSingleFieldChange(product.id, 'sub_category_id', value!)
           }
           placeholder="Select subcategory"
           nothingFound="No subcategories"
         />
       </Table.Td>
 
-      {/* Tags Multi-Select */}
       <Table.Td>
         <MultiSelect
           data={tags.map((tag) => ({
@@ -73,10 +104,10 @@ const ProductRow = memo(({
             label: tag.name,
           }))}
           value={product.tags.map((tag) => tag.id.toString())}
-          onChange={(value) => 
+          onChange={(value) =>
             selectedRows.includes(product.id)
-              ? handleFieldChange('tag_ids', value) // Change all selected rows
-              : handleSingleFieldChange(product.id, 'tag_ids', value) // Change only this row
+              ? handleFieldChange('tag_ids', value)
+              : handleSingleFieldChange(product.id, 'tag_ids', value)
           }
           placeholder="Select tags"
           searchable
@@ -87,70 +118,71 @@ const ProductRow = memo(({
   );
 });
 
+// Define types for the ProductTable props
+interface ProductTableProps {
+  products: Product[];
+  categories: Category[];
+  subCategories: SubCategory[];
+  tags: Tag[];
+  onUpdateProduct: (productId: number, updatedData: Record<string, string | string[]>) => void;
+}
+
 export function ProductTable({
   products = [],
   categories = [],
   subCategories = [],
   tags = [],
-  onUpdateProduct, // Function to handle product updates
-}) {
-  const [selectedRows, setSelectedRows] = useState([]); // Track selected rows
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const [rowsPerPage, setRowsPerPage] = useState(10); // Number of rows to display per page (adjusted dynamically)
+  onUpdateProduct,
+}: ProductTableProps) {
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  // Handle row selection (toggle row selection)
-  const handleRowSelection = (productId) => {
+  const handleRowSelection = (productId: number) => {
     setSelectedRows((prev) =>
       prev.includes(productId)
-        ? prev.filter((id) => id !== productId) // Deselect
-        : [...prev, productId] // Select
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
     );
   };
 
-  // Handle select all / deselect all rows
   const handleSelectAll = () => {
     if (selectedRows.length === products.length) {
-      setSelectedRows([]); // Deselect all if all rows are selected
+      setSelectedRows([]);
     } else {
-      const newSelectedRows = products.map((product) => product.id); // Select all rows across all pages
+      const newSelectedRows = products.map((product) => product.id);
       setSelectedRows(newSelectedRows);
     }
   };
 
-  // Handle field change for multiple selected rows
-  const handleFieldChange = (field, value) => {
-    const updatedField = field === 'tag_ids' ? field : `${field}`;
+  const handleFieldChange = (field: string, value: string | string[]) => {
     selectedRows.forEach((productId) => {
-      onUpdateProduct(productId, { [updatedField]: value });
+      onUpdateProduct(productId, { [field]: value });
     });
   };
 
-  // Handle individual field change (for a single product)
-  const handleSingleFieldChange = (productId, field, value) => {
+  const handleSingleFieldChange = (productId: number, field: string, value: string | string[]) => {
     onUpdateProduct(productId, { [field]: value });
   };
 
-  // Calculate the rows to be displayed for the current page
   const startIdx = (currentPage - 1) * rowsPerPage;
   const endIdx = startIdx + rowsPerPage;
   const currentRows = products.slice(startIdx, endIdx);
 
-  // Dynamically calculate the rows per page based on screen size
   useEffect(() => {
     const updateRowsPerPage = () => {
-      const tableHeight = window.innerHeight - 300; // Reserve space for header, footer, etc.
-      const rowHeight = 50; // Adjust based on the average row height in pixels
+      const tableHeight = window.innerHeight - 300;
+      const rowHeight = 50;
       const rows = Math.floor(tableHeight / rowHeight);
-      setRowsPerPage(rows > 0 ? rows : 10); // Minimum of 10 rows if screen is small
+      setRowsPerPage(rows > 0 ? rows : 10);
     };
 
     updateRowsPerPage();
-    window.addEventListener('resize', updateRowsPerPage); // Recalculate on window resize
+    window.addEventListener('resize', updateRowsPerPage);
 
     return () => window.removeEventListener('resize', updateRowsPerPage);
   }, []);
 
-  // Check if all rows across all pages are selected
   const allRowsSelected = selectedRows.length === products.length;
 
   return (
@@ -159,7 +191,6 @@ export function ProductTable({
         <Table>
           <Table.Thead>
             <Table.Tr>
-              {/* Select All / Deselect All checkbox in the header */}
               <Table.Th>
                 <Checkbox
                   checked={allRowsSelected}
@@ -184,8 +215,8 @@ export function ProductTable({
                 subCategories={subCategories}
                 tags={tags}
                 handleRowSelection={handleRowSelection}
-                handleFieldChange={handleFieldChange} // Pass for bulk update
-                handleSingleFieldChange={handleSingleFieldChange} // Pass for single row update
+                handleFieldChange={handleFieldChange}
+                handleSingleFieldChange={handleSingleFieldChange}
                 selectedRows={selectedRows}
                 isSelected={selectedRows.includes(product.id)}
               />
@@ -194,7 +225,6 @@ export function ProductTable({
         </Table>
       </ScrollArea>
 
-      {/* Pagination */}
       <Pagination
         page={currentPage}
         onChange={setCurrentPage}
