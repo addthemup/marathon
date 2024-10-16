@@ -1,22 +1,40 @@
-import React, { useState, useEffect } from 'react';
+// Remove unused React import
+import { useState, useEffect } from 'react';
 import { Table, ScrollArea, LoadingOverlay, Pagination, Button, Box } from '@mantine/core';
 import { fetchSalesReportData } from '../Api/SalesReportApi'; // Updated API to fetch sales report data
 import SalesReportSidebar from './SalesReportSidebar';  // Import the sidebar component
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+// Declare the module 'file-saver' if type definitions are not available
+declare module 'file-saver';
+
+// Define types for sales data
+interface SaleData {
+  account: string;
+  invoice_number: string;
+  sales_rep?: string;
+  sale_date: string;
+  brand: string;
+  product_code: string;
+  product_description: string;
+  quantity_sold: number;
+  quantity_invoiced: number;
+  sell_price: string;
+}
+
 const SalesReport = () => {
-  const [salesData, setSalesData] = useState([]);
+  const [salesData, setSalesData] = useState<SaleData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filteredSales, setFilteredSales] = useState([]);
+  const [filteredSales, setFilteredSales] = useState<SaleData[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCustomers, setSelectedCustomers] = useState([]);  // For customer filtering
-  const [selectedBrands, setSelectedBrands] = useState([]);  // For brand filtering
-  const [selectedSalesReps, setSelectedSalesReps] = useState([]);  // For sales rep filtering
-  const [brands, setBrands] = useState([]);  // For storing all available brands
-  const [customers, setCustomers] = useState([]);  // For storing all available customers
-  const [salesReps, setSalesReps] = useState([]);  // For storing all available sales reps
+  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);  // For customer filtering
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);  // For brand filtering
+  const [selectedSalesReps, setSelectedSalesReps] = useState<string[]>([]);  // For sales rep filtering
+  const [brands, setBrands] = useState<string[]>([]);  // For storing all available brands
+  const [customers, setCustomers] = useState<string[]>([]);  // For storing all available customers
+  const [salesReps, setSalesReps] = useState<string[]>([]);  // For storing all available sales reps
   const [startDate, setStartDate] = useState('');  // For start date filter
   const [endDate, setEndDate] = useState('');  // For end date filter
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,10 +61,10 @@ const SalesReport = () => {
   }, []);
 
   // Extract unique brands, customers, and sales reps for filtering
-  const extractFilters = (sales) => {
-    const brandsSet = new Set();
-    const customersSet = new Set();
-    const salesRepsSet = new Set(['Unknown']);  // Include 'Unknown' for cases where there is no sales rep
+  const extractFilters = (sales: SaleData[]) => {
+    const brandsSet = new Set<string>();
+    const customersSet = new Set<string>();
+    const salesRepsSet = new Set<string>(['Unknown']);  // Include 'Unknown' for cases where there is no sales rep
 
     sales.forEach((sale) => {
       brandsSet.add(sale.brand);
@@ -54,9 +72,9 @@ const SalesReport = () => {
       salesRepsSet.add(sale.sales_rep || 'Unknown');  // Add 'Unknown' for null sales reps
     });
 
-    setBrands([...brandsSet]);
-    setCustomers([...customersSet]);
-    setSalesReps([...salesRepsSet]);
+    setBrands(Array.from(brandsSet));
+    setCustomers(Array.from(customersSet));
+    setSalesReps(Array.from(salesRepsSet));
   };
 
   // Filter sales based on the selected filters
@@ -91,7 +109,7 @@ const SalesReport = () => {
   };
 
   // Function to handle page changes
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
@@ -148,7 +166,7 @@ const SalesReport = () => {
       {/* Main Sales Report Table */}
       <div style={{ flex: 1, overflowY: 'auto', maxHeight: '100vh', padding: '5px' }}>
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <LoadingOverlay visible={loading} />
           </Box>
         ) : (
