@@ -1,13 +1,9 @@
-// Remove unused React import
 import { useState, useEffect } from 'react';
 import { Table, ScrollArea, LoadingOverlay, Pagination, Button, Box } from '@mantine/core';
 import { fetchSalesReportData } from '../Api/SalesReportApi'; // Updated API to fetch sales report data
 import SalesReportSidebar from './SalesReportSidebar';  // Import the sidebar component
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
-// Declare the module 'file-saver' if type definitions are not available
-declare module 'file-saver';
 
 // Define types for sales data
 interface SaleData {
@@ -26,7 +22,6 @@ interface SaleData {
 const SalesReport = () => {
   const [salesData, setSalesData] = useState<SaleData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [filteredSales, setFilteredSales] = useState<SaleData[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);  // For customer filtering
@@ -51,8 +46,7 @@ const SalesReport = () => {
         setFilteredSales(sales);  // Initialize filtered sales with all sales data
         extractFilters(sales);  // Extract unique brands, customers, and sales reps
         setLoading(false);
-      } catch (err) {
-        setError('Failed to load sales data');
+      } catch {
         setLoading(false);
       }
     };
@@ -208,7 +202,7 @@ const SalesReport = () => {
           </ScrollArea>
         )}
         <Pagination
-          page={currentPage}
+          value={currentPage}
           onChange={handlePageChange}
           total={Math.ceil(filteredSales.length / rowsPerPage)}
           position="center"
