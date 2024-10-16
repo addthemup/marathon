@@ -57,11 +57,11 @@ export function Products() {
 
   // Modal state management
   const [modalOpened, setModalOpened] = useState(false);
-  const [modalType, setModalType] = useState<'Category' | 'Subcategory' | 'Tag' | ''>(''); // Tracks whether to show Category, Subcategory, or Tag form
+  const [modalType, setModalType] = useState<'Category' | 'Subcategory' | 'Tag' | ''>(''); 
   const [newCategory, setNewCategory] = useState('');
   const [newSubCategory, setNewSubCategory] = useState<{ category: string; subCategory: string }>({ category: '', subCategory: '' });
   const [newTag, setNewTag] = useState('');
-  const [notificationMessage, setNotificationMessage] = useState(''); // To display success/error messages
+  const [notificationMessage, setNotificationMessage] = useState(''); 
 
   // Fetch products, categories, subcategories, and tags
   const loadData = async () => {
@@ -77,15 +77,14 @@ export function Products() {
       setProducts(productData);
       setFilteredProducts(productData);
 
-      const uniqueBrands = [...new Set(productData.map((product) => product.brand))];
-
+      const uniqueBrands = Array.from(new Set(productData.map((product) => product.brand)));
       setBrands(uniqueBrands);
-      setCategories(categoryData); // List of categories with id, name
-      setSubCategories(subCategoryData); // List of subcategories with id, name
-      setTags(tagData); // List of tags with id, name
+      setCategories(categoryData);
+      setSubCategories(subCategoryData);
+      setTags(tagData);
 
       setLoading(false);
-    } catch (err) {
+    } catch {
       setError('Failed to load data');
       setLoading(false);
     }
@@ -93,31 +92,22 @@ export function Products() {
 
   // Fetch products, categories, subcategories, and tags on component mount
   useEffect(() => {
-    loadData(); // Initial data load
+    loadData();
   }, []);
 
   // Refresh the table view by reloading the data
-  const handleRefresh = () => {
-    loadData();
-  };
+  const handleRefresh = () => loadData();
 
-  // Filter products based on selected brands, categories, tags, and search query
+  // Filter products based on selected filters and search query
   useEffect(() => {
     const lowerCaseQuery = searchQuery.toLowerCase();
-
     const filtered = products.filter((product) => {
-      const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
-      const matchesCategory =
-        selectedCategories.length === 0 || selectedCategories.includes(product.category.name);
-      const matchesTags =
-        selectedTags.length === 0 || selectedTags.every((tag) => product.tags.some((t) => t.name === tag));
-      const matchesSearch =
-        product.product_code.toLowerCase().includes(lowerCaseQuery) ||
-        product.product_description.toLowerCase().includes(lowerCaseQuery);
-
+      const matchesBrand = !selectedBrands.length || selectedBrands.includes(product.brand);
+      const matchesCategory = !selectedCategories.length || selectedCategories.includes(product.category.name);
+      const matchesTags = !selectedTags.length || selectedTags.every((tag) => product.tags.some((t) => t.name === tag));
+      const matchesSearch = product.product_code.toLowerCase().includes(lowerCaseQuery) || product.product_description.toLowerCase().includes(lowerCaseQuery);
       return matchesBrand && matchesCategory && matchesTags && matchesSearch;
     });
-
     setFilteredProducts(filtered);
   }, [selectedBrands, selectedCategories, selectedTags, searchQuery, products]);
 
@@ -125,14 +115,10 @@ export function Products() {
   const handleUpdateProduct = async (productId: number, updatedFields: Partial<ProductData>) => {
     try {
       const updatedProduct = await updateProduct(productId, updatedFields);
-
-      // Update product list with the updated product
-      const updatedProducts = products.map((product) =>
-        product.id === updatedProduct.id ? updatedProduct : product
-      );
+      const updatedProducts = products.map((product) => (product.id === updatedProduct.id ? updatedProduct : product));
       setProducts(updatedProducts);
-      setFilteredProducts(updatedProducts); // Also update the filtered list
-    } catch (err) {
+      setFilteredProducts(updatedProducts);
+    } catch {
       setError('Failed to update product');
     }
   };
@@ -144,8 +130,8 @@ export function Products() {
       setNotificationMessage('Category successfully created!');
       setModalOpened(false);
       setNewCategory('');
-      handleRefresh(); // Reload data after creation
-    } catch (error) {
+      handleRefresh();
+    } catch {
       setNotificationMessage('Error creating category.');
     }
   };
@@ -156,8 +142,8 @@ export function Products() {
       setNotificationMessage('Subcategory successfully created!');
       setModalOpened(false);
       setNewSubCategory({ category: '', subCategory: '' });
-      handleRefresh(); // Reload data after creation
-    } catch (error) {
+      handleRefresh();
+    } catch {
       setNotificationMessage('Error creating subcategory.');
     }
   };
@@ -168,8 +154,8 @@ export function Products() {
       setNotificationMessage('Tag successfully created!');
       setModalOpened(false);
       setNewTag('');
-      handleRefresh(); // Reload data after creation
-    } catch (error) {
+      handleRefresh();
+    } catch {
       setNotificationMessage('Error creating tag.');
     }
   };
@@ -224,7 +210,7 @@ export function Products() {
           setModalType('Tag');
           setModalOpened(true);
         }}
-        onRefresh={handleRefresh}  // Pass refresh function
+        onRefresh={handleRefresh}
       />
 
       {/* Loading Overlay */}
