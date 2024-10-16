@@ -1,9 +1,9 @@
-const BASE_URL = 'http://localhost:8000/api/products/';  // Adjust base URL if necessary
+const BASE_URL = 'http://localhost:8000/api/products/'; // Adjust base URL if necessary
 
 // Helper function to get authorization headers
 const getAuthHeaders = () => ({
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorage.getItem('token')}`,  // Assuming you're using JWT for authorization
+  Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're using JWT for authorization
 });
 
 // Fetch all products
@@ -63,7 +63,7 @@ export const fetchTags = async () => {
 };
 
 // Create a new category
-export const createCategory = async (categoryData) => {
+export const createCategory = async (categoryData: object) => {
   const response = await fetch(`${BASE_URL}categories/`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -78,7 +78,7 @@ export const createCategory = async (categoryData) => {
 };
 
 // Create a new subcategory (linked to a category via foreign key)
-export const createSubCategory = async (subCategoryData) => {
+export const createSubCategory = async (subCategoryData: object) => {
   const response = await fetch(`${BASE_URL}subcategories/`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -93,7 +93,7 @@ export const createSubCategory = async (subCategoryData) => {
 };
 
 // Create a new tag
-export const createTag = async (tagData) => {
+export const createTag = async (tagData: object) => {
   const response = await fetch(`${BASE_URL}tags/`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -108,9 +108,9 @@ export const createTag = async (tagData) => {
 };
 
 // Update a product (e.g., updating category, subcategory, or tags)
-export const updateProduct = async (productId, productData) => {
+export const updateProduct = async (productId: number, productData: object) => {
   const response = await fetch(`${BASE_URL}${productId}/`, {
-    method: 'PATCH',  // PATCH is used for partial updates
+    method: 'PATCH', // PATCH is used for partial updates
     headers: getAuthHeaders(),
     body: JSON.stringify(productData),
   });
