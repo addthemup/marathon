@@ -33,7 +33,7 @@ export default function App() {
   }, []);
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider theme={{ globalStyles: true, normalizeCSS: true }}>
       <ModalsProvider>
         <Router>
           <div className={styles.appContainer}>
