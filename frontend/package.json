@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",                // Removed tsc to avoid blocking issues
-    "prebuild": "tsc --noEmit || true",   // Runs TypeScript check but doesn't block on errors
+    "build": "vite build",
+    "prebuild": "tsc --noEmit || true", 
     "lint": "eslint .",
     "preview": "vite preview"
   },
