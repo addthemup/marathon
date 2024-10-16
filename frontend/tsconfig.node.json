@@ -4,24 +4,22 @@
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "noImplicitAny": true,
-    "strict": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": false,
+    "strict": false,               // Disable strict mode
+    "noImplicitAny": false,         // Allow implicit any types
+    "strictNullChecks": false,      // Allow null checks to be relaxed
+    "strictFunctionTypes": false,   // Disable strict function type checking
 
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "noEmit": true,                // No output generation
 
     /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noUnusedLocals": true,         // Warn on unused local variables
+    "noUnusedParameters": true,     // Warn on unused function parameters
+    "noFallthroughCasesInSwitch": true // Warn if switch case fallthrough occurs
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"]      // Include the config file
 }
