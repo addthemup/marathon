@@ -6,8 +6,31 @@ const getAuthHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're using JWT for authorization
 });
 
+// Define types for the data structures
+type CategoryData = {
+  name: string;
+  description?: string;
+};
+
+type SubCategoryData = {
+  category: number; // assuming it's linked via foreign key
+  name: string;
+};
+
+type TagData = {
+  name: string;
+};
+
+type ProductData = {
+  name: string;
+  category: number;
+  subCategory?: number;
+  tags?: number[];
+  price: number;
+};
+
 // Fetch all products
-export const fetchProducts = async () => {
+export const fetchProducts = async (): Promise<ProductData[]> => {
   const response = await fetch(`${BASE_URL}`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -21,7 +44,7 @@ export const fetchProducts = async () => {
 };
 
 // Fetch categories
-export const fetchCategories = async () => {
+export const fetchCategories = async (): Promise<CategoryData[]> => {
   const response = await fetch(`${BASE_URL}categories/`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -35,7 +58,7 @@ export const fetchCategories = async () => {
 };
 
 // Fetch subcategories
-export const fetchSubCategories = async () => {
+export const fetchSubCategories = async (): Promise<SubCategoryData[]> => {
   const response = await fetch(`${BASE_URL}subcategories/`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -49,7 +72,7 @@ export const fetchSubCategories = async () => {
 };
 
 // Fetch tags
-export const fetchTags = async () => {
+export const fetchTags = async (): Promise<TagData[]> => {
   const response = await fetch(`${BASE_URL}tags/`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -63,7 +86,7 @@ export const fetchTags = async () => {
 };
 
 // Create a new category
-export const createCategory = async (categoryData: object) => {
+export const createCategory = async (categoryData: CategoryData): Promise<CategoryData> => {
   const response = await fetch(`${BASE_URL}categories/`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -77,8 +100,8 @@ export const createCategory = async (categoryData: object) => {
   return await response.json();
 };
 
-// Create a new subcategory (linked to a category via foreign key)
-export const createSubCategory = async (subCategoryData: object) => {
+// Create a new subcategory
+export const createSubCategory = async (subCategoryData: SubCategoryData): Promise<SubCategoryData> => {
   const response = await fetch(`${BASE_URL}subcategories/`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -93,7 +116,7 @@ export const createSubCategory = async (subCategoryData: object) => {
 };
 
 // Create a new tag
-export const createTag = async (tagData: object) => {
+export const createTag = async (tagData: TagData): Promise<TagData> => {
   const response = await fetch(`${BASE_URL}tags/`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -107,10 +130,10 @@ export const createTag = async (tagData: object) => {
   return await response.json();
 };
 
-// Update a product (e.g., updating category, subcategory, or tags)
-export const updateProduct = async (productId: number, productData: object) => {
+// Update a product
+export const updateProduct = async (productId: number, productData: Partial<ProductData>): Promise<ProductData> => {
   const response = await fetch(`${BASE_URL}${productId}/`, {
-    method: 'PATCH', // PATCH is used for partial updates
+    method: 'PATCH',
     headers: getAuthHeaders(),
     body: JSON.stringify(productData),
   });
