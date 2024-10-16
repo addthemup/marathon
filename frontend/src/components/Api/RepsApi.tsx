@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/reps/";  // Adjust if needed
+const BASE_URL = "http://localhost:8000/api/reps/"; // Adjust if needed
 
 // Helper function to get authorization token
 const getAuthHeaders = () => ({
@@ -6,8 +6,17 @@ const getAuthHeaders = () => ({
   'Authorization': `Bearer ${localStorage.getItem('token')}`,
 });
 
+// Define interfaces for sales rep data (example structure)
+interface SalesRep {
+  id?: number;
+  full_name: string;
+  branch_accounts?: any[];
+  top_ten_items_by_volume?: any[];
+  top_ten_items_by_price?: any[];
+}
+
 // Fetch all sales reps
-export const fetchSalesReps = async () => {
+export const fetchSalesReps = async (): Promise<SalesRep[]> => {
   const response = await fetch(`${BASE_URL}`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -19,17 +28,17 @@ export const fetchSalesReps = async () => {
 
   const data = await response.json();
 
-  // Additional processing (e.g., mapping over branch accounts and top sales) if necessary
-  return data.map(rep => ({
+  // Additional processing if necessary
+  return data.map((rep: SalesRep) => ({
     ...rep,
     branch_accounts: rep.branch_accounts || [],
     top_ten_items_by_volume: rep.top_ten_items_by_volume || [],
-    top_ten_items_by_price: rep.top_ten_items_by_price || []
+    top_ten_items_by_price: rep.top_ten_items_by_price || [],
   }));
 };
 
 // Create a new sales rep
-export const createSalesRep = async (salesRepData) => {
+export const createSalesRep = async (salesRepData: SalesRep): Promise<SalesRep> => {
   const response = await fetch(`${BASE_URL}`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -45,7 +54,7 @@ export const createSalesRep = async (salesRepData) => {
 };
 
 // Update sales rep by ID
-export const updateSalesRep = async (id, salesRepData) => {
+export const updateSalesRep = async (id: number, salesRepData: SalesRep): Promise<SalesRep> => {
   const response = await fetch(`${BASE_URL}${id}/`, {
     method: 'PUT',
     headers: getAuthHeaders(),
@@ -61,7 +70,7 @@ export const updateSalesRep = async (id, salesRepData) => {
 };
 
 // Delete sales rep by ID
-export const deleteSalesRep = async (id) => {
+export const deleteSalesRep = async (id: number): Promise<boolean> => {
   const response = await fetch(`${BASE_URL}${id}/`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
@@ -75,7 +84,7 @@ export const deleteSalesRep = async (id) => {
 };
 
 // Fetch sales rep details with branch accounts, top volume, and top price items
-export const fetchSalesRepDetails = async (id) => {
+export const fetchSalesRepDetails = async (id: number): Promise<SalesRep> => {
   const response = await fetch(`${BASE_URL}${id}/`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -91,6 +100,6 @@ export const fetchSalesRepDetails = async (id) => {
     ...data,
     branch_accounts: data.branch_accounts || [],
     top_ten_items_by_volume: data.top_ten_items_by_volume || [],
-    top_ten_items_by_price: data.top_ten_items_by_price || []
+    top_ten_items_by_price: data.top_ten_items_by_price || [],
   };
 };

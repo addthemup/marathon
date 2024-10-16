@@ -1,9 +1,15 @@
-// /src/components/Api/UsersApi.tsx
+const BASE_URL = "http://localhost:8000/api/users"; // Adjust if needed
 
-const BASE_URL = "http://localhost:8000/api/users";  // Adjust if needed
+// Define the type for user registration data
+interface UserRegistrationData {
+  username: string;
+  password: string;
+  email?: string; // Optional field if your API allows optional email
+  [key: string]: any; // In case there are additional fields
+}
 
 // Register a new user
-export const registerUser = async (userData) => {
+export const registerUser = async (userData: UserRegistrationData): Promise<any> => {
   const response = await fetch(`${BASE_URL}/register/`, {
     method: 'POST',
     headers: {
@@ -21,7 +27,7 @@ export const registerUser = async (userData) => {
 };
 
 // Login and get JWT token
-export const loginUser = async (username, password) => {
+export const loginUser = async (username: string, password: string): Promise<any> => {
   const response = await fetch("http://localhost:8000/api/token/", {
     method: 'POST',
     headers: {
@@ -46,11 +52,14 @@ export const loginUser = async (username, password) => {
 };
 
 // Logout function to clear localStorage
-export const logoutUser = () => {
+export const logoutUser = (): void => {
   localStorage.removeItem('token');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('username');
 };
 
-export const getToken = () => localStorage.getItem('token');
-export const getUsername = () => localStorage.getItem('username');
+// Retrieve the token from localStorage
+export const getToken = (): string | null => localStorage.getItem('token');
+
+// Retrieve the username from localStorage
+export const getUsername = (): string | null => localStorage.getItem('username');
