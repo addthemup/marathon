@@ -1,0 +1,222 @@
+import { useState, useEffect } from 'react';
+import {
+  fetchProducts,
+  fetchCategories,
+  fetchSubCategories,
+  fetchTags,
+  createCategory,
+  createSubCategory,
+  createTag,
+  updateProduct,
+} from '../Api/ProductsApi';
+import { ProductTableHeader } from './ProductTableHeader';
+import { ProductTable } from './ProductTable';
+import { ProductModal } from './ProductModal';
+import { LoadingOverlay, Notification } from '@mantine/core';
+import classes from './Products.module.css';
+
+export function Products() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Modal state management
+  const [modalOpened, setModalOpened] = useState(false);
+  const [modalType, setModalType] = useState(''); // Tracks whether to show Category, Subcategory, or Tag form
+  const [newCategory, setNewCategory] = useState('');
+  const [newSubCategory, setNewSubCategory] = useState({ category: '', subCategory: '' });
+  const [newTag, setNewTag] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(''); // To display success/error messages
+
+  // Fetch products, categories, subcategories, and tags
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [productData, categoryData, subCategoryData, tagData] = await Promise.all([
+        fetchProducts(),
+        fetchCategories(),
+        fetchSubCategories(),
+        fetchTags(),
+      ]);
+
+      setProducts(productData);
+      setFilteredProducts(productData);
+
+      const uniqueBrands = [...new Set(productData.map((product) => product.brand))];
+
+      setBrands(uniqueBrands);
+      setCategories(categoryData); // List of categories with id, name
+      setSubCategories(subCategoryData); // List of subcategories with id, name
+      setTags(tagData); // List of tags with id, name
+
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to load data');
+      setLoading(false);
+    }
+  };
+
+  // Fetch products, categories, subcategories, and tags on component mount
+  useEffect(() => {
+    loadData(); // Initial data load
+  }, []);
+
+  // Refresh the table view by reloading the data
+  const handleRefresh = () => {
+    loadData();
+  };
+
+  // Filter products based on selected brands, categories, tags, and search query
+  useEffect(() => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+
+    const filtered = products.filter((product) => {
+      const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+      const matchesCategory =
+        selectedCategories.length === 0 || selectedCategories.includes(product.category.name);
+      const matchesTags =
+        selectedTags.length === 0 || selectedTags.every((tag) => product.tags.some((t) => t.name === tag));
+      const matchesSearch =
+        product.product_code.toLowerCase().includes(lowerCaseQuery) ||
+        product.product_description.toLowerCase().includes(lowerCaseQuery);
+
+      return matchesBrand && matchesCategory && matchesTags && matchesSearch;
+    });
+
+    setFilteredProducts(filtered);
+  }, [selectedBrands, selectedCategories, selectedTags, searchQuery, products]);
+
+  // Handle product updates (category, subcategory, or tags)
+  const handleUpdateProduct = async (productId, updatedFields) => {
+    try {
+      const updatedProduct = await updateProduct(productId, updatedFields);
+
+      // Update product list with the updated product
+      const updatedProducts = products.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      );
+      setProducts(updatedProducts);
+      setFilteredProducts(updatedProducts); // Also update the filtered list
+    } catch (err) {
+      setError('Failed to update product');
+    }
+  };
+
+  // Handle modal submission for each form
+  const handleSubmitNewCategory = async () => {
+    try {
+      await createCategory({ name: newCategory });
+      setNotificationMessage('Category successfully created!');
+      setModalOpened(false);
+      setNewCategory('');
+      handleRefresh(); // Reload data after creation
+    } catch (error) {
+      setNotificationMessage('Error creating category.');
+    }
+  };
+
+  const handleSubmitNewSubCategory = async () => {
+    try {
+      await createSubCategory({ category: newSubCategory.category, name: newSubCategory.subCategory });
+      setNotificationMessage('Subcategory successfully created!');
+      setModalOpened(false);
+      setNewSubCategory({ category: '', subCategory: '' });
+      handleRefresh(); // Reload data after creation
+    } catch (error) {
+      setNotificationMessage('Error creating subcategory.');
+    }
+  };
+
+  const handleSubmitNewTag = async () => {
+    try {
+      await createTag({ name: newTag });
+      setNotificationMessage('Tag successfully created!');
+      setModalOpened(false);
+      setNewTag('');
+      handleRefresh(); // Reload data after creation
+    } catch (error) {
+      setNotificationMessage('Error creating tag.');
+    }
+  };
+
+  return (
+    <div style={{ height: '100%', width: '100%' }}>
+      {/* Modal for creating new categories, subcategories, and tags */}
+      <ProductModal
+        modalOpened={modalOpened}
+        modalType={modalType}
+        newCategory={newCategory}
+        setNewCategory={setNewCategory}
+        newSubCategory={newSubCategory}
+        setNewSubCategory={setNewSubCategory}
+        newTag={newTag}
+        setNewTag={setNewTag}
+        handleSubmitNewCategory={handleSubmitNewCategory}
+        handleSubmitNewSubCategory={handleSubmitNewSubCategory}
+        handleSubmitNewTag={handleSubmitNewTag}
+        onClose={() => setModalOpened(false)}
+      />
+
+      {/* Display notification if there's a success or error message */}
+      {notificationMessage && (
+        <Notification className={classes.notification} onClose={() => setNotificationMessage('')}>
+          {notificationMessage}
+        </Notification>
+      )}
+
+      {/* Table Header with filters and creation buttons */}
+      <ProductTableHeader
+        brands={brands}
+        categories={categories.map((category) => category.name)}
+        tags={tags.map((tag) => tag.name)}
+        selectedBrands={selectedBrands}
+        selectedCategories={selectedCategories}
+        selectedTags={selectedTags}
+        searchQuery={searchQuery}
+        setSelectedBrands={setSelectedBrands}
+        setSelectedCategories={setSelectedCategories}
+        setSelectedTags={setSelectedTags}
+        setSearchQuery={setSearchQuery}
+        onNewCategoryClick={() => {
+          setModalType('Category');
+          setModalOpened(true);
+        }}
+        onNewSubCategoryClick={() => {
+          setModalType('Subcategory');
+          setModalOpened(true);
+        }}
+        onNewTagClick={() => {
+          setModalType('Tag');
+          setModalOpened(true);
+        }}
+        onRefresh={handleRefresh}  // Pass refresh function
+      />
+
+      {/* Loading Overlay */}
+      {loading && <LoadingOverlay visible={loading} />}
+
+      {/* Product Table */}
+      {!loading && !error && (
+        <ProductTable
+          products={filteredProducts}
+          categories={categories}
+          subCategories={subCategories}
+          tags={tags}
+          onUpdateProduct={handleUpdateProduct}
+        />
+      )}
+
+      {/* Error Message */}
+      {error && <div className={classes.error}>{error}</div>}
+    </div>
+  );
+}

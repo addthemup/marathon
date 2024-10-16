@@ -1,0 +1,45 @@
+/* App.module.css */
+
+/* Main app container - flex layout */
+.appContainer {
+  display: flex;
+  flex-direction: column; /* Ensures header and navbar stack vertically */
+  height: 100vh;
+}
+
+/* Header container */
+.headerContainer {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar container */
+.navContainer {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  background-color: #000000; /* Keep the black background for the navbar */
+  width: 100%; /* Make sure the navbar takes the full width */
+  height: 50px; /* Set a fixed height for the horizontal navbar */
+  display: flex; /* Ensure horizontal layout for the nav items */
+  justify-content: center; /* Center navbar items */
+}
+
+/* Main content area */
+.contentContainer {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  flex-direction: column; /* Ensure content stacks below the navbar */
+}
+
+/* Content window should take all remaining space */
+.contentWindow {
+  flex-grow: 1;
+  padding: 0;
+  height: 100%;
+  overflow: auto; /* Allow scrolling if content overflows */
+}

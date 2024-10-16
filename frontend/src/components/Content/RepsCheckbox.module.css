@@ -1,0 +1,26 @@
+.header {
+    position: sticky;
+    top: 0;
+    background-color: var(--mantine-color-body);
+  }
+  
+  .scrolled {
+    box-shadow: var(--mantine-shadow-sm);
+  }
+  
+  .highlightedRow {
+    background-color: rgba(255, 0, 0, 0.25); /* Faint blue background for selected rep */
+  }
+  
+  .icon {
+    color: var(--mantine-color-gray-5);
+  }
+  
+  .name {
+    font-family: Greycliff CF, var(--mantine-font-family);
+  }
+
+  .user {
+    padding: 10px;
+  }
+  

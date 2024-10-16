@@ -1,0 +1,542 @@
+[
+    {
+        "Milestone": "1",
+        "null": "Drawings Completed",
+        "Date": "8/1/2022",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "2",
+        "null": "Construction / Renovation Contract(s) Executed",
+        "Date": "3/5/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "3",
+        "null": "25% of Construction / Renovation Completed (25% of the cost is in\nplace)",
+        "Date": "3/31/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "4",
+        "null": "50% of Construction / Renovation Completed",
+        "Date": "4/28/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "5",
+        "null": "75% of Construction / Renovation Completed",
+        "Date": "5/26/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "6",
+        "null": "Construction / Renovation Completed",
+        "Date": "6/23/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "7",
+        "null": "Building / Space Occupied",
+        "Date": "7/1/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "8",
+        "null": "Services Offered",
+        "Date": "7/1/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "9",
+        "null": "First Annual Report Due* (only for non-ESRD decisions)",
+        "Date": "9/30/2024",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "2",
+        "Financing Obtained": "Drawings Completed",
+        "03/05/2023": "05/04/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "3",
+        "Financing Obtained": "Land Acquired",
+        "03/05/2023": "05/24/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "4",
+        "Financing Obtained": "Construction / Renovation Contract(s) Executed",
+        "03/05/2023": "08/02/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "5",
+        "Financing Obtained": "25% of Construction / Renovation Completed (25% of the cost is in\nplace)",
+        "03/05/2023": "12/22/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "6",
+        "Financing Obtained": "50% of Construction / Renovation Completed",
+        "03/05/2023": "05/13/2024",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "7",
+        "Financing Obtained": "75% of Construction / Renovation Completed",
+        "03/05/2023": "10/02/2024",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "8",
+        "Financing Obtained": "Construction / Renovation Completed",
+        "03/05/2023": "02/22/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "9",
+        "Financing Obtained": "Equipment Ordered",
+        "03/05/2023": "10/12/2024",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "10",
+        "Financing Obtained": "Equipment Installed",
+        "03/05/2023": "03/24/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "11",
+        "Financing Obtained": "Equipment Operational",
+        "03/05/2023": "04/07/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "12",
+        "Financing Obtained": "Building / Space Occupied",
+        "03/05/2023": "03/03/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "13",
+        "Financing Obtained": "Licensure Obtained",
+        "03/05/2023": "07/01/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "14",
+        "Financing Obtained": "Services Offered",
+        "03/05/2023": "07/01/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "15",
+        "Financing Obtained": "Facility or Service Accredited",
+        "03/05/2023": "10/01/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "1": "16",
+        "Financing Obtained": "First Annual Report Due*",
+        "03/05/2023": "04/01/2027",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "1",
+        "null": "Drawings Completed",
+        "Date\nmm/dd/yyyy": "05/12/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "2",
+        "null": "Construction / Renovation Contract(s) Executed",
+        "Date\nmm/dd/yyyy": "06/16/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "3",
+        "null": "25% of Construction / Renovation Completed (25% of the cost is in place)",
+        "Date\nmm/dd/yyyy": "06/30/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "4",
+        "null": "50% of Construction / Renovation Completed",
+        "Date\nmm/dd/yyyy": "07/17/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "5",
+        "null": "75% of Construction / Renovation Completed",
+        "Date\nmm/dd/yyyy": "07/31/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "6",
+        "null": "Construction / Renovation Completed",
+        "Date\nmm/dd/yyyy": "08/14/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "7",
+        "null": "Equipment Ordered",
+        "Date\nmm/dd/yyyy": "06/19/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "8",
+        "null": "Equipment Installed",
+        "Date\nmm/dd/yyyy": "09/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "9",
+        "null": "Equipment Operational",
+        "Date\nmm/dd/yyyy": "09/05/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "10",
+        "null": "Building / Space Occupied",
+        "Date\nmm/dd/yyyy": "09/07/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "11",
+        "null": "Services Offered",
+        "Date\nmm/dd/yyyy": "10/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "12",
+        "null": "First Annual Report Due*",
+        "Date\nmm/dd/yyyy": "04/01/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "1",
+        "null": "Equipment Operational",
+        "Date": "4/1/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "2",
+        "null": "Services Offered (required)",
+        "Date": "4/1/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "3",
+        "null": "First Annual Report Due",
+        "Date": "4/1/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "1",
+        "null": "Financing Obtained",
+        "Date": "06/10/2022",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "2",
+        "null": "Drawings Completed",
+        "Date": "05/15/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "3",
+        "null": "Construction / Renovation Contract(s) Executed",
+        "Date": "06/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "4",
+        "null": "25% of Construction / Renovation Completed (25% of the cost is in\nplace)",
+        "Date": "07/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "5",
+        "null": "50% of Construction / Renovation Completed",
+        "Date": "08/15/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "6",
+        "null": "75% of Construction / Renovation Completed",
+        "Date": "09/30/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "7",
+        "null": "Construction / Renovation Completed",
+        "Date": "12/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "8",
+        "null": "Equipment Ordered",
+        "Date": "05/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "9",
+        "null": "Equipment Installed",
+        "Date": "11/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "10",
+        "null": "Equipment Operational",
+        "Date": "12/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "11",
+        "null": "Building / Space Occupied",
+        "Date": "12/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "12",
+        "null": "Licensure Obtained",
+        "Date": "12/16/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "13",
+        "null": "Services Offered",
+        "Date": "01/01/2024",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "14",
+        "null": "First Annual Report Due*",
+        "Date": "03/31/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "1",
+        "null": "Financing Obtained",
+        "Date": "03/05/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "2",
+        "null": "Equipment Ordered",
+        "Date": "04/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "3",
+        "null": "Equipment Installed",
+        "Date": "09/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "4",
+        "null": "Equipment Operational",
+        "Date": "10/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "5",
+        "null": "Building / Space Occupied",
+        "Date": "10/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "6",
+        "null": "Services Offered",
+        "Date": "10/01/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "7",
+        "null": "First Annual Report Due* (only for non-ESRD decisions)",
+        "Date": "01/01/2025",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    }
+]

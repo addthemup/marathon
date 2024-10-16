@@ -1,0 +1,39 @@
+.navbar {
+  width: 100%; /* Full width for the horizontal layout */
+  height: 50px; /* Adjust height for the horizontal navbar */
+  padding: 0;
+  background-color: var(--mantine-color-black-7); /* Change to red */
+  color: var(--mantine-color-white);
+  display: flex; /* Ensure the navbar is a flex container */
+  align-items: center;
+  justify-content: space-evenly; /* Space the items evenly */
+}
+
+.navbarMain {
+  flex: 1;
+  display: flex; /* Flexbox layout for horizontal */
+  gap: 0px; /* Adjust the gap between icons */
+}
+
+.link {
+  width: 100%; /* Adjust width for the horizontal icon container */
+  height: 50px; /* Adjust height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mantine-color-white);
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: var(--mantine-color-red-6); /* Slight hover effect */
+  }
+
+  &[data-active] {
+    &,
+    &:hover {
+      box-shadow: var(--mantine-shadow-sm);
+      background-color: var(--mantine-color-white); /* White background when active */
+      color: var(--mantine-color-red-7); /* Red icon when active */
+    }
+  }
+}

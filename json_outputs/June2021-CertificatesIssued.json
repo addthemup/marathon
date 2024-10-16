@@ -1,0 +1,56 @@
+[
+    {
+        "Milestone": "4",
+        "null": "Construction / Renovation Contract(s) Executed",
+        "Date\nmm/dd/yyyy": "7/1/2021",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "6",
+        "null": "50% of Construction / Renovation Completed",
+        "Date\nmm/dd/yyyy": "11/8/2021",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "8",
+        "null": "Construction / Renovation Completed",
+        "Date\nmm/dd/yyyy": "1/15/2022",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "13",
+        "null": "Licensure Obtained",
+        "Date\nmm/dd/yyyy": "4/15/2022",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "14",
+        "null": "Services Offered",
+        "Date\nmm/dd/yyyy": "6/8/2022",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    },
+    {
+        "Milestone": "17",
+        "null": "First Annual Report Due*",
+        "Date\nmm/dd/yyyy": "8/1/2023",
+        "Expanded_Data": {
+            "Physical_Location": null,
+            "Timetable": []
+        }
+    }
+]

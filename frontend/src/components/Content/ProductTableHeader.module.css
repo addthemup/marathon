@@ -1,0 +1,34 @@
+.headerContainer {
+  background-color: #ffffff; /* Light background to separate the header from the table */
+  padding: 00px;
+  border-radius: 5px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  margin-bottom: 0px; /* Add some space between the header and the table */
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filtersSection {
+  display: flex;
+  gap: 20px;
+}
+
+.filterSection {
+  display: inline-block;
+}
+
+.checkboxGroup {
+  margin-top: 10px;
+}
+
+.multiSelect {
+  width: 300px;
+}
+
+.searchInput {
+  width: 300px;
+}

@@ -1,0 +1,32 @@
+.tableContainer {
+  width: 100%;
+  position: relative;
+}
+
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.highlightedRow {
+  background-color: #f0f8ff; /* Light blue highlight for selected rows */
+}
+
+table {
+  width: 100%;
+}
+
+tr {
+  height: 50px; /* Smaller row height */
+}
+
+td {
+  padding: 8px;
+  font-size: 14px; /* Smaller font size for compact rows */
+}
+
+th {
+  font-size: 14px;
+  padding: 8px;
+}

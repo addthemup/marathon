@@ -1,0 +1,22 @@
+.container {
+    padding: 20px;
+  }
+  
+  .filterGroup {
+    margin-bottom: 20px;
+  }
+  
+  .tableContainer {
+    margin-top: 20px;
+  }
+  
+  .rightAligned {
+    text-align: right;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
