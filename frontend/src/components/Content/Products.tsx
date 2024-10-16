@@ -15,25 +15,51 @@ import { ProductModal } from './ProductModal';
 import { LoadingOverlay, Notification } from '@mantine/core';
 import classes from './Products.module.css';
 
+// Define the types for the data structures
+interface ProductData {
+  id: number;
+  product_code: string;
+  product_description: string;
+  brand: string;
+  category: { id: number; name: string };
+  sub_category: { id: number; name: string } | null;
+  tags: { id: number; name: string }[];
+}
+
+interface CategoryData {
+  id: number;
+  name: string;
+}
+
+interface SubCategoryData {
+  id: number;
+  name: string;
+}
+
+interface TagData {
+  id: number;
+  name: string;
+}
+
 export function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [subCategories, setSubCategories] = useState<SubCategoryData[]>([]);
+  const [tags, setTags] = useState<TagData[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Modal state management
   const [modalOpened, setModalOpened] = useState(false);
-  const [modalType, setModalType] = useState(''); // Tracks whether to show Category, Subcategory, or Tag form
+  const [modalType, setModalType] = useState<'Category' | 'Subcategory' | 'Tag' | ''>(''); // Tracks whether to show Category, Subcategory, or Tag form
   const [newCategory, setNewCategory] = useState('');
-  const [newSubCategory, setNewSubCategory] = useState({ category: '', subCategory: '' });
+  const [newSubCategory, setNewSubCategory] = useState<{ category: string; subCategory: string }>({ category: '', subCategory: '' });
   const [newTag, setNewTag] = useState('');
   const [notificationMessage, setNotificationMessage] = useState(''); // To display success/error messages
 
@@ -96,7 +122,7 @@ export function Products() {
   }, [selectedBrands, selectedCategories, selectedTags, searchQuery, products]);
 
   // Handle product updates (category, subcategory, or tags)
-  const handleUpdateProduct = async (productId, updatedFields) => {
+  const handleUpdateProduct = async (productId: number, updatedFields: Partial<ProductData>) => {
     try {
       const updatedProduct = await updateProduct(productId, updatedFields);
 
