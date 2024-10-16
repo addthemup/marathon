@@ -21,9 +21,9 @@ interface Product {
   product_code: string;
   product_description: string;
   brand: string;
-  category: number;
-  sub_category?: number;
-  tags: number[];
+  category: Category; // Use the object form instead of number
+  sub_category?: SubCategory | null; // Optional subcategory
+  tags: Tag[];
 }
 
 interface Category {
@@ -74,10 +74,11 @@ export function Products() {
         fetchTags(),
       ]);
 
+      // Assuming `fetchProducts` API returns products with `category` and `sub_category` as objects
       setProducts(productData);
       setFilteredProducts(productData);
 
-      const uniqueBrands = Array.from(new Set(productData.map((product) => product.brand)));
+      const uniqueBrands = Array.from(new Set(productData.map((product: Product) => product.brand)));
       setBrands(uniqueBrands);
       setCategories(categoryData);
       setSubCategories(subCategoryData);
@@ -103,8 +104,8 @@ export function Products() {
     const lowerCaseQuery = searchQuery.toLowerCase();
     const filtered = products.filter((product) => {
       const matchesBrand = !selectedBrands.length || selectedBrands.includes(product.brand);
-      const matchesCategory = !selectedCategories.length || selectedCategories.includes(product.category);
-      const matchesTags = !selectedTags.length || selectedTags.every((tag) => product.tags.includes(tag));
+      const matchesCategory = !selectedCategories.length || selectedCategories.includes(product.category.id);
+      const matchesTags = !selectedTags.length || selectedTags.every((tag) => product.tags.some((t) => t.id === tag));
       const matchesSearch = product.product_code.toLowerCase().includes(lowerCaseQuery) || product.product_description.toLowerCase().includes(lowerCaseQuery);
       return matchesBrand && matchesCategory && matchesTags && matchesSearch;
     });
