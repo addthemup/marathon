@@ -1,13 +1,35 @@
 const BASE_URL = "http://localhost:8000/api"; // Adjust if needed
 
+// Types for the API data structures (adjust as necessary based on your backend API)
+interface AccountData {
+  id?: string;
+  name: string;
+  [key: string]: any; // For dynamic fields
+}
+
+interface RootAccountData {
+  name: string;
+  [key: string]: any; // For dynamic fields
+}
+
+interface BranchAccountData {
+  name: string;
+  [key: string]: any; // For dynamic fields
+}
+
+interface SalesRepData {
+  id: string;
+  name: string;
+}
+
 // Helper function to get the authorization token from localStorage
-const getAuthHeaders = () => ({
+const getAuthHeaders = (): Record<string, string> => ({
   'Content-Type': 'application/json',
   'Authorization': `Bearer ${localStorage.getItem('token')}`,
 });
 
 // Helper function to refresh the token
-const refreshToken = async () => {
+const refreshToken = async (): Promise<string> => {
   const refresh = localStorage.getItem('refresh_token');
   if (!refresh) {
     throw new Error('No refresh token available');
@@ -31,7 +53,11 @@ const refreshToken = async () => {
 };
 
 // Helper function to handle token expiration and retry the request
-const fetchWithToken = async (url, options, retry = true) => {
+const fetchWithToken = async (
+  url: string,
+  options: RequestInit,
+  retry = true
+): Promise<Response> => {
   let response = await fetch(url, options);
 
   // Handle unauthorized errors and refresh token
@@ -41,7 +67,10 @@ const fetchWithToken = async (url, options, retry = true) => {
       try {
         // Token is expired, refresh it
         const newToken = await refreshToken();
-        options.headers['Authorization'] = `Bearer ${newToken}`; // Set new token
+        options.headers = {
+          ...options.headers,
+          'Authorization': `Bearer ${newToken}`,
+        }; // Set new token
 
         // Retry the original request with the new token
         response = await fetch(url, options);
@@ -56,7 +85,7 @@ const fetchWithToken = async (url, options, retry = true) => {
 };
 
 // Fetch all accounts
-export const fetchAccounts = async () => {
+export const fetchAccounts = async (): Promise<AccountData[]> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/accounts/`, {
       method: 'GET',
@@ -75,7 +104,7 @@ export const fetchAccounts = async () => {
 };
 
 // Fetch all root accounts
-export const fetchRootAccounts = async () => {
+export const fetchRootAccounts = async (): Promise<RootAccountData[]> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/root-accounts/`, {
       method: 'GET',
@@ -94,7 +123,9 @@ export const fetchRootAccounts = async () => {
 };
 
 // Create a new root account
-export const createRootAccount = async (rootAccountData) => {
+export const createRootAccount = async (
+  rootAccountData: RootAccountData
+): Promise<RootAccountData> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/root-accounts/`, {
       method: 'POST',
@@ -115,7 +146,9 @@ export const createRootAccount = async (rootAccountData) => {
 };
 
 // Create a new account
-export const createAccount = async (accountData) => {
+export const createAccount = async (
+  accountData: AccountData
+): Promise<AccountData> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/accounts/`, {
       method: 'POST',
@@ -136,7 +169,10 @@ export const createAccount = async (accountData) => {
 };
 
 // Update existing account (full account update)
-export const updateAccount = async (id, accountData) => {
+export const updateAccount = async (
+  id: string,
+  accountData: AccountData
+): Promise<AccountData> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/accounts/${id}/`, {
       method: 'PUT',
@@ -157,7 +193,7 @@ export const updateAccount = async (id, accountData) => {
 };
 
 // Delete an account
-export const deleteAccount = async (id) => {
+export const deleteAccount = async (id: string): Promise<boolean> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/accounts/${id}/`, {
       method: 'DELETE',
@@ -168,7 +204,7 @@ export const deleteAccount = async (id) => {
       throw new Error('Failed to delete account');
     }
 
-    return true; // Return true if deletion was successful
+    return true;
   } catch (error) {
     console.error('Error deleting account:', error);
     throw error;
@@ -176,7 +212,7 @@ export const deleteAccount = async (id) => {
 };
 
 // Fetch all sales reps
-export const fetchSalesReps = async () => {
+export const fetchSalesReps = async (): Promise<SalesRepData[]> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/reps/`, {
       method: 'GET',
@@ -195,7 +231,10 @@ export const fetchSalesReps = async () => {
 };
 
 // Update sales rep for a specific account
-export const updateAccountSalesRep = async (accountId, newSalesRepId) => {
+export const updateAccountSalesRep = async (
+  accountId: string,
+  newSalesRepId: string
+): Promise<AccountData> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/accounts/${accountId}/update-sales-rep/`, {
       method: 'PUT',
@@ -215,7 +254,7 @@ export const updateAccountSalesRep = async (accountId, newSalesRepId) => {
 };
 
 // Fetch all branch accounts
-export const fetchBranchAccounts = async () => {
+export const fetchBranchAccounts = async (): Promise<BranchAccountData[]> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/branch-accounts/`, {
       method: 'GET',
@@ -234,7 +273,9 @@ export const fetchBranchAccounts = async () => {
 };
 
 // Create a new branch account
-export const createBranchAccount = async (branchAccountData) => {
+export const createBranchAccount = async (
+  branchAccountData: BranchAccountData
+): Promise<BranchAccountData> => {
   try {
     const response = await fetchWithToken(`${BASE_URL}/branch-accounts/`, {
       method: 'POST',
@@ -255,7 +296,7 @@ export const createBranchAccount = async (branchAccountData) => {
 };
 
 // Delete root account
-export const deleteRootAccount = async (id) => {
+export const deleteRootAccount = async (id: string): Promise<boolean> => {
   const response = await fetchWithToken(`${BASE_URL}/root-accounts/${id}/`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
@@ -265,11 +306,11 @@ export const deleteRootAccount = async (id) => {
     throw new Error('Failed to delete root account');
   }
 
-  return true; // Return true if deletion was successful
+  return true;
 };
 
 // Delete branch account
-export const deleteBranchAccount = async (id) => {
+export const deleteBranchAccount = async (id: string): Promise<boolean> => {
   const response = await fetchWithToken(`${BASE_URL}/branch-accounts/${id}/`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
@@ -279,5 +320,5 @@ export const deleteBranchAccount = async (id) => {
     throw new Error('Failed to delete branch account');
   }
 
-  return true; // Return true if deletion was successful
+  return true;
 };
