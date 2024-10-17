@@ -17,9 +17,10 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "5173:5173"  # Change to Vite's default port
+      - "5173:5173"  # Expose Vite's default port
     environment:
-      - HOST=0.0.0.0  # Ensure Vite runs on all interfaces
+      - HOST=0.0.0.0  # Make Vite accessible on all network interfaces
+    command: npm run dev -- --host 0.0.0.0  # Ensure Vite is serving on 0.0.0.0
 
   db:
     image: postgres
