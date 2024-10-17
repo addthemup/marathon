@@ -17,7 +17,9 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "3000:3000"
+      - "5173:5173"  # Change to Vite's default port
+    environment:
+      - HOST=0.0.0.0  # Ensure Vite runs on all interfaces
 
   db:
     image: postgres
