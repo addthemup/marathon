@@ -13,12 +13,8 @@ RUN npm install
 # Copy the rest of the application files to the container
 COPY . .
 
-# Build the Vite project
-RUN npm run build
+# Expose the correct port for Vite
+EXPOSE 5173
 
-# Expose port 3000 (or your Vite app port)
-EXPOSE 3000
-
-# Start the app
-CMD ["npm", "run", "serve"]
-
+# Start the Vite dev server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
