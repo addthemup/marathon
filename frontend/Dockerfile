@@ -13,7 +13,7 @@ ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps --verbose
 
 # Copy the rest of the application files to the container
 COPY . .
