@@ -3,5 +3,8 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  build: {
+    minify: false, // Disable esbuild minification
+  },
+  plugins: [react()], // Comma added after build block
 })
