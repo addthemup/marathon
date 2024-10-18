@@ -7,13 +7,15 @@ WORKDIR /app
 # Copy only package.json and package-lock.json first for better caching of npm install
 COPY package*.json ./
 
-# Install project dependencies (including devDependencies)
 # Ensure NODE_ENV is development to include devDependencies like Vite
 ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 
 # Install dependencies
-RUN npm install --legacy-peer-deps --verbose
+RUN npm install --legacy-peer-deps
+
+# Add a debug step to check if Vite is installed
+RUN npm list vite
 
 # Copy the rest of the application files to the container
 COPY . .
