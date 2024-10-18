@@ -2,8 +2,8 @@
 FROM python:3.10-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1  # Prevent Python from writing pyc files to disc
-ENV PYTHONUNBUFFERED=1  # Ensure stdout and stderr are flushed immediately
+ENV PYTHONDONTWRITEBYTECODE=1 
+ENV PYTHONUNBUFFERED=1
 
 # Set the working directory in the container
 WORKDIR /app
