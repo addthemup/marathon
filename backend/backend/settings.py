@@ -5,12 +5,20 @@ import os
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Secret key and debug
+# Secret key
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-dev-secret-key')
-DEBUG = True
 
-# Allowed hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'db', '137.184.223.198']  # Added your Droplet's IP
+# Determine if we're in production or development mode
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')  # 'development' or 'production'
+
+# Set debug based on the environment
+DEBUG = ENVIRONMENT == 'development'
+
+# Allowed hosts: dynamically set based on environment
+if ENVIRONMENT == 'production':
+    ALLOWED_HOSTS = ['137.184.223.198', 'yourdomain.com']
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Installed apps
 INSTALLED_APPS = [
@@ -71,17 +79,29 @@ TEMPLATES = [
 # WSGI application
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database settings (updated Postgres service name)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'marathon',        # Database name from docker-compose.yml
-        'USER': 'awc',             # Postgres user from docker-compose.yml
-        'PASSWORD': 'Starbury03',  # Postgres password from docker-compose.yml
-        'HOST': 'db',              # Use 'db', the Docker service name for Postgres
-        'PORT': '5432',            # Default Postgres port
+# Database configuration: Switch between local and production databases
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'marathon',        # Database name from docker-compose.yml
+            'USER': 'awc',             # Postgres user from docker-compose.yml
+            'PASSWORD': 'Starbury03',  # Postgres password from docker-compose.yml
+            'HOST': 'db',              # Docker service name for Postgres
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'marathon',        # Local Postgres database
+            'USER': 'awc',
+            'PASSWORD': 'Starbury03',
+            'HOST': 'localhost',       # Local Postgres server
+            'PORT': '5432',
+        }
+    }
 
 # Custom user model
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -106,7 +126,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# CORS settings
+# CORS settings: Allow specific origins for production and localhost for development
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -114,8 +134,18 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',
 ]
 
+if ENVIRONMENT == 'production':
+    CORS_ALLOWED_ORIGINS += [
+        'http://137.184.223.198:5173',
+        'http://137.184.223.198',
+        'http://admwyn.com'
+    ]
+
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+
+if ENVIRONMENT == 'production':
+    CSRF_TRUSTED_ORIGINS += ['http://admwyn.com']
 
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [
