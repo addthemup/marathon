@@ -16,7 +16,8 @@ DEBUG = ENVIRONMENT == 'development'
 
 # Allowed hosts: dynamically set based on environment
 if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS = ['137.184.223.198', 'yourdomain.com']
+    ALLOWED_HOSTS = ['137.184.223.198', 'admwyn.com', 'www.admwyn.com']
+
 else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -106,6 +107,17 @@ else:
 # Custom user model
 AUTH_USER_MODEL = 'users.UserProfile'
 
+if ENVIRONMENT == 'production':
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
 # REST framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -126,6 +138,13 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+if ENVIRONMENT == 'production':
+    CSRF_TRUSTED_ORIGINS = [
+        'https://admwyn.com',
+        'https://www.admwyn.com'
+    ]
+
+
 # CORS settings: Allow specific origins for production and localhost for development
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
@@ -136,10 +155,11 @@ CORS_ALLOWED_ORIGINS = [
 
 if ENVIRONMENT == 'production':
     CORS_ALLOWED_ORIGINS += [
-        'http://137.184.223.198:5173',
-        'http://137.184.223.198',
-        'http://admwyn.com'
+        'https://137.184.223.198:5173',
+        'https://admwyn.com',
+        'https://www.admwyn.com'
     ]
+
 
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
@@ -168,6 +188,8 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files settings
 STATIC_URL = 'static/'
