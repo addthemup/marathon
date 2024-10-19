@@ -8,11 +8,35 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Secret key
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-dev-secret-key')
 
-# Determine if we're in production or development mode
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')  # 'development' or 'production'
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # Set debug based on the environment
 DEBUG = ENVIRONMENT == 'development'
+
+
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),        # Database name from env
+            'USER': os.getenv('DJANGO_DB_USER', 'awc'),             # User from env
+            'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),  # Password from env
+            'HOST': os.getenv('DJANGO_DB_HOST', 'db'),              # Host from env
+            'PORT': '5432',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'marathon',        # Local Postgres database
+            'USER': 'awc',
+            'PASSWORD': 'Starbury03',
+            'HOST': 'localhost',       # Local Postgres server
+            'PORT': '5432',
+        }
+    }
+
 
 
 
@@ -75,29 +99,6 @@ TEMPLATES = [
 # WSGI application
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database configuration: Switch between local and production databases
-if ENVIRONMENT == 'production':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'marathon',        # Database name from docker-compose.yml
-            'USER': 'awc',             # Postgres user from docker-compose.yml
-            'PASSWORD': 'Starbury03',  # Postgres password from docker-compose.yml
-            'HOST': 'db',              # Docker service name for Postgres
-            'PORT': '5432',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'marathon',        # Local Postgres database
-            'USER': 'awc',
-            'PASSWORD': 'Starbury03',
-            'HOST': 'localhost',       # Local Postgres server
-            'PORT': '5432',
-        }
-    }
 
 # Custom user model
 AUTH_USER_MODEL = 'users.UserProfile'
