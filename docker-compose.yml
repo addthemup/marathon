@@ -10,6 +10,12 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      - ENVIRONMENT=production  # This tells Django to use the 'production' settings
+      - DJANGO_DB_HOST=db        # Explicitly set the host for PostgreSQL inside Docker
+      - DJANGO_DB_NAME=marathon  # Set database name
+      - DJANGO_DB_USER=awc       # Set PostgreSQL user
+      - DJANGO_DB_PASSWORD=Starbury03  # Set PostgreSQL password
 
   frontend:
     build: ./frontend
@@ -17,10 +23,10 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "5173:5173"  
+      - "5173:5173"
     environment:
-      - HOST=0.0.0.0  
-    command: npm run dev -- --host 0.0.0.0 
+      - HOST=0.0.0.0
+    command: npm run dev -- --host 0.0.0.0
 
   db:
     image: postgres

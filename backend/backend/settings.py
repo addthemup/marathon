@@ -14,12 +14,7 @@ ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')  # 'development' or 'produc
 # Set debug based on the environment
 DEBUG = ENVIRONMENT == 'development'
 
-# Allowed hosts: dynamically set based on environment
-if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS = ['137.184.223.198', 'admwyn.com', 'www.admwyn.com']
 
-else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Installed apps
 INSTALLED_APPS = [
@@ -187,3 +182,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Allowed hosts: dynamically set based on environment
+if ENVIRONMENT == 'production':
+    ALLOWED_HOSTS = ['137.184.223.198', 'admwyn.com', 'www.admwyn.com']
+
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
