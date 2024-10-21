@@ -2,6 +2,10 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+from django.middleware.security import SecurityMiddleware
+
+
+
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,6 +16,9 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # Set debug based on the environment
 DEBUG = ENVIRONMENT == 'development'
+
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
 if ENVIRONMENT == 'production':
@@ -70,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 # URL configuration
@@ -137,7 +145,15 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'http://admwyn.com',
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://137.184.223.198',
+    'http://localhost:5173',
+    'https://admwyn.com',  # If you later switch to a domain
+]
+
 
 if ENVIRONMENT == 'production':
     CORS_ALLOWED_ORIGINS += [
@@ -176,6 +192,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Static files settings
 STATIC_URL = 'static/'
