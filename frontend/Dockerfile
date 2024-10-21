@@ -15,7 +15,7 @@ ENV NODE_ENV=$NODE_ENV
 RUN npm install --legacy-peer-deps
 
 # Ensure Vite is installed and available globally
-RUN npm install -g vite
+RUN npm install vite --force
 
 RUN npm install @vitejs/plugin-react --force
 
