@@ -16,24 +16,26 @@ RUN apt-get update && apt-get install -y \
     nginx \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements.txt file first for dependency installation
+# Copy the requirements.txt file for dependency installation
 COPY requirements.txt /app/requirements.txt
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the rest of the application after dependencies are installed
+# Copy the entire application code to the container
 COPY . /app
 
-# Configure Nginx
+# Copy the Nginx configuration file
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Ensure the Nginx log directory exists
-RUN mkdir -p /var/log/nginx
+# Create necessary directories for Nginx logs and static files
+RUN mkdir -p /var/log/nginx /app/staticfiles /app/media
 
-# Expose the ports used by Nginx (80 for HTTP, 443 for HTTPS)
-EXPOSE 80 443
-
-# Copy and make the entrypoint script executable
+# Ensure the entrypoint script is executable
 RUN chmod +x /app/backend/entrypoint.sh
 
-# Start Nginx in the background, then start Gunicorn (Django)
-CMD service nginx start && gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+# Expose necessary ports (80 for HTTP, 443 for HTTPS)
+EXPOSE 80 443
+
+# Start Nginx and then run Gunicorn to serve Django
+CMD service nginx start && gunicorn --workers 3 --bind 0.0.0.0:8000 backend.wsgi:application
