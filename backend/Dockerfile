@@ -27,6 +27,8 @@ COPY backend/entrypoint.sh /app/entrypoint.sh
 # Make the entrypoint script executable
 RUN chmod +x /app/entrypoint.sh
 
+RUN apt-get update && apt-get install -y netcat
+
 # Expose the port that the Django app will run on
 EXPOSE 8000
 
