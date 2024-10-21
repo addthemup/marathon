@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies and create app user
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     build-essential \
@@ -21,12 +21,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
+# Copy the entrypoint script
+COPY backend/entrypoint.sh /app/entrypoint.sh
+
+# Make the entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
+
 # Expose the port that the Django app will run on
 EXPOSE 8000
 
-# Collect static files for production
-
-RUN python manage.py collectstatic --noinput
-
-# Run Gunicorn for production with 3 worker processes
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "backend.wsgi:application"]
+# Set entrypoint to the script
+ENTRYPOINT ["/app/entrypoint.sh"]

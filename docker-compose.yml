@@ -3,7 +3,6 @@ services:
   backend:
     build: ./backend
     container_name: django_app
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/app
     ports:
@@ -11,9 +10,9 @@ services:
     depends_on:
       - db
     environment:
-      - ENVIRONMENT=production  # This tells Django to use the 'production' settings
-      - DJANGO_DB_HOST=db        # Explicitly set the host for PostgreSQL inside Docker
-      - DJANGO_DB_NAME=marathon  # Set database name
+      - ENVIRONMENT=production  # Use 'production' settings
+      - DJANGO_DB_HOST=db        # Set the database host to the 'db' service
+      - DJANGO_DB_NAME=marathon  # Set the database name
       - DJANGO_DB_USER=awc       # Set PostgreSQL user
       - DJANGO_DB_PASSWORD=Starbury03  # Set PostgreSQL password
 
