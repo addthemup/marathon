@@ -20,9 +20,6 @@ RUN npm install -g vite
 RUN npm install @vitejs/plugin-react --force
 
 
-RUN npm audit fix --force
-
-
 # Copy the rest of the application files to the container
 COPY . .
 
