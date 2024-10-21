@@ -8,10 +8,11 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and netcat
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     build-essential \
+    netcat-openbsd \  # Updated to specify netcat-openbsd
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements.txt and install Python dependencies
@@ -26,8 +27,6 @@ COPY backend/entrypoint.sh /app/entrypoint.sh
 
 # Make the entrypoint script executable
 RUN chmod +x /app/entrypoint.sh
-
-RUN apt-get update && apt-get install -y netcat
 
 # Expose the port that the Django app will run on
 EXPOSE 8000
