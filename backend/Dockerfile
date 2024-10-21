@@ -25,8 +25,7 @@ COPY . .
 EXPOSE 8000
 
 # Collect static files for production
-RUN python manage.py migrate
-RUN python manage.py manage.py loaddata data.json
+
 RUN python manage.py collectstatic --noinput
 
 # Run Gunicorn for production with 3 worker processes
