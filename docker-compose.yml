@@ -15,6 +15,8 @@ services:
       - DJANGO_DB_NAME=marathon  # Set the database name
       - DJANGO_DB_USER=awc       # Set PostgreSQL user
       - DJANGO_DB_PASSWORD=Starbury03  # Set PostgreSQL password
+    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+    restart: always  # Ensures the container restarts if it crashes or fails
 
   frontend:
     build: ./frontend
@@ -26,12 +28,26 @@ services:
     environment:
       - HOST=0.0.0.0
     command: npm run dev -- --host 0.0.0.0
+    restart: always  # Ensures the container restarts if it crashes or fails
 
   db:
-    image: postgres
+    image: postgres:13
+    container_name: postgres_db
     environment:
       POSTGRES_DB: marathon
       POSTGRES_USER: awc
       POSTGRES_PASSWORD: Starbury03
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U awc"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+volumes:
+  postgres_data:

@@ -1,4 +1,4 @@
-# Use the official Python image from Docker Hub
+# Use the official slim Python image from Docker Hub
 FROM python:3.10-slim
 
 # Set environment variables
@@ -8,28 +8,27 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies and netcat
+# Install system dependencies and PostgreSQL client
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     build-essential \
-    netcat-openbsd \  # Updated to specify netcat-openbsd
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements.txt and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the requirements.txt file first for dependency installation
+COPY requirements.txt /app/requirements.txt
 
-# Copy the rest of the application code
-COPY . .
+# Install Python dependencies
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the entrypoint script
-COPY backend/entrypoint.sh /app/entrypoint.sh
+# Copy the rest of the application code into the container
+COPY . /app
 
-# Make the entrypoint script executable
-RUN chmod +x /app/entrypoint.sh
+# Copy and make the entrypoint script executable
+RUN chmod +x /app/backend/entrypoint.sh
 
-# Expose the port that the Django app will run on
+# Expose the port on which the Django app will run
 EXPOSE 8000
 
-# Set entrypoint to the script
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Set the entrypoint to your script
+ENTRYPOINT ["/app/backend/entrypoint.sh"]
