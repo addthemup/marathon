@@ -14,11 +14,11 @@ ENV NODE_ENV=$NODE_ENV
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
+RUN npm install vite --force
+
 RUN npm install @vitejs/plugin-react --force
 
 
-# Debug step to ensure Vite is installed (remove in production)
-RUN npm list vite
 
 # Copy the rest of the application files to the container
 COPY . .
