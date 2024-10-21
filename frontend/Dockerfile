@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as the base image
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,6 +20,7 @@ RUN npm install -g vite
 RUN npm install @vitejs/plugin-react --force
 
 
+RUN npm audit fix --force
 
 
 # Copy the rest of the application files to the container
