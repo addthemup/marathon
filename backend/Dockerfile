@@ -18,11 +18,13 @@ RUN apt-get update && apt-get install -y \
 # Copy the requirements.txt file first for dependency installation
 COPY requirements.txt /app/requirements.txt
 
-# Install Python dependencies
+# Copy only requirements first to allow caching of dependencies
+COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application after dependencies are installed
 COPY . /app
+
 
 # Copy and make the entrypoint script executable
 RUN chmod +x /app/backend/entrypoint.sh
