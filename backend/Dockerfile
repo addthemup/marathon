@@ -27,8 +27,8 @@ COPY . /app
 
 
 
+
 # Expose the port on which the Django app will run
 EXPOSE 8000
 
-# Set the entrypoint to your script
-ENTRYPOINT ["/app/backend/entrypoint.sh"]
+
