@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api";  // Adjust if needed
+const BASE_URL = "http://localhost:8000/api"; 
 
 // Helper function to get the authorization token
 const getAuthHeaders = () => ({
