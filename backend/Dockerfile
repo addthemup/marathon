@@ -26,8 +26,6 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY . /app
 
 
-# Copy and make the entrypoint script executable
-RUN chmod +x /app/backend/entrypoint.sh
 
 # Expose the port on which the Django app will run
 EXPOSE 8000
