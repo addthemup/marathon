@@ -24,8 +24,8 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY . /app
 
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY ../nginx/nginx.conf /etc/nginx/nginx.conf
 
 
 # Create necessary directories for Nginx logs and static files
