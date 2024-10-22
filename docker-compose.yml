@@ -5,16 +5,12 @@ services:
     container_name: django_app
     volumes:
       - ./backend:/app
+    env_file:
+      - ./backend/.env  # Reference the .env file
     expose:
       - "8000"
     depends_on:
       - db
-    environment:
-      - ENVIRONMENT=production  # Use 'production' settings
-      - DJANGO_DB_HOST=db        # Set the database host to the 'db' service
-      - DJANGO_DB_NAME=marathon  # Set the database name
-      - DJANGO_DB_USER=awc       # Set PostgreSQL user
-      - DJANGO_DB_PASSWORD=Starbury03  # Set PostgreSQL password
     restart: always
 
   frontend:

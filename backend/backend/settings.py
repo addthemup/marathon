@@ -1,17 +1,21 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
 
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Secret key
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-key')
 
-# Raise error if SECRET_KEY is not provided in production
 if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
 
+# Environment setting (production or development)
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # Set debug based on the environment
@@ -23,7 +27,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),  # Default for local dev
+        'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),
         'USER': os.getenv('DJANGO_DB_USER', 'awc'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
         'HOST': os.getenv('DJANGO_DB_HOST', 'localhost' if ENVIRONMENT == 'development' else 'db'),
@@ -42,9 +46,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'whitenoise.runserver_nostatic',  # Add whitenoise to handle static files in dev
+    'whitenoise.runserver_nostatic',
     'blog',
-    'rest_framework_simplejwt.token_blacklist',  # Blacklisting JWT tokens
+    'rest_framework_simplejwt.token_blacklist',
     'accounts',
     'brands',
     'reps',
@@ -171,9 +175,9 @@ if ENVIRONMENT == 'production':
 
 # Additional security settings for production
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = True  # Ensure requests are redirected to HTTPS
-    SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for a year
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+    X_FRAME_OPTIONS = 'DENY'
