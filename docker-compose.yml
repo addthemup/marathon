@@ -1,4 +1,5 @@
-version: '3'
+version: '3.7'
+
 services:
   backend:
     build: ./backend
@@ -6,7 +7,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - ./backend/.env  # Ensure the .env file has correct environment variables
+      - ./backend/.env  # Ensure the .env file has the correct environment variables
     expose:
       - "8000"
     depends_on:
@@ -33,8 +34,7 @@ services:
     environment:
       POSTGRES_DB: marathon
       POSTGRES_USER: awc
-      POSTGRES_PASSWORD: Starbury03
-      # Adding the default superuser role
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password  # Use Docker secret for password
       POSTGRES_INITDB_ARGS: "--username=postgres --pwfile=/run/secrets/postgres_password"
     ports:
       - "5432:5432"
