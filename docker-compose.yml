@@ -1,4 +1,4 @@
-version: '3.8'  # Updated to use a newer Compose version with better support for "depends_on"
+version: '3.8'
 
 services:
   backend:
@@ -13,7 +13,7 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Wait for db to pass health check
-    command: ["/app/entrypoint.sh"]  # Use entrypoint.sh for initialization and server startup
+    command: ["/app/backend/entrypoint.sh"]  # Make sure entrypoint.sh has execute permission
     restart: always
 
   frontend:
@@ -25,7 +25,7 @@ services:
       - "5173"
     environment:
       - HOST=0.0.0.0
-    command: npm run dev -- --host 0.0.0.0
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
     restart: always
 
   db:
@@ -45,7 +45,7 @@ services:
     secrets:
       - postgres_password  # Secure handling of the default superuser password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U awc"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
       start_period: 10s
@@ -63,9 +63,9 @@ services:
       - ./backend/media:/app/media  # Serve media files
     depends_on:
       backend:
-        condition: service_started
+        condition: service_healthy  # Wait until backend is healthy
       frontend:
-        condition: service_started
+        condition: service_started  # Start after frontend is running
     restart: always
 
 volumes:
@@ -73,4 +73,4 @@ volumes:
 
 secrets:
   postgres_password:
-    file: ./postgres_password.txt  # This file should contain your superuser password
+    file: ./postgres_password.txt  # This file should contain your superuser password in plain text
