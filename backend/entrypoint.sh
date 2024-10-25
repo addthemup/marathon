@@ -3,7 +3,7 @@
 # Wait for the PostgreSQL database to be ready
 echo "Waiting for the database..."
 while ! nc -z db 5432; do
-  sleep 1
+  sleep 10
 done
 echo "Database started"
 

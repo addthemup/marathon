@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'  # Updated to use a newer Compose version with better support for "depends_on"
 
 services:
   backend:
@@ -13,7 +13,7 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Wait for db to pass health check
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: ["/app/entrypoint.sh"]  # Use entrypoint.sh for initialization and server startup
     restart: always
 
   frontend:
@@ -62,8 +62,10 @@ services:
       - ./backend/staticfiles:/app/staticfiles  # Serve static files
       - ./backend/media:/app/media  # Serve media files
     depends_on:
-      - backend
-      - frontend
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_started
     restart: always
 
 volumes:
