@@ -1,14 +1,14 @@
--- init.sql
-DO $$ BEGIN
-   CREATE ROLE awc WITH LOGIN PASSWORD 'Starbury03';
-   RAISE NOTICE 'Role awc created';
-EXCEPTION
-   WHEN DUPLICATE_OBJECT THEN
-      RAISE NOTICE 'Role awc already exists';
-END $$;
+-- Create the 'awc' role if it does not already exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'awc') THEN
+        CREATE ROLE awc WITH LOGIN PASSWORD 'Starbury03';
+    END IF;
+END
+$$;
 
+-- Create the database with 'awc' as the owner
 CREATE DATABASE marathon OWNER awc;
-RAISE NOTICE 'Database marathon created with owner awc';
 
+-- Grant all privileges on the database to 'awc'
 GRANT ALL PRIVILEGES ON DATABASE marathon TO awc;
-RAISE NOTICE 'Granted all privileges on database marathon to awc';
