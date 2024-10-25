@@ -6,11 +6,13 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - ./backend/.env  # Reference the .env file
+      - ./backend/.env  # Ensure the .env file has correct environment variables
     expose:
       - "8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # Wait for db to pass health check
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     restart: always
 
   frontend:
@@ -32,11 +34,15 @@ services:
       POSTGRES_DB: marathon
       POSTGRES_USER: awc
       POSTGRES_PASSWORD: Starbury03
+      # Adding the default superuser role
+      POSTGRES_INITDB_ARGS: "--username=postgres --pwfile=/run/secrets/postgres_password"
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
+    secrets:
+      - postgres_password  # Secure handling of the default superuser password
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U awc"]
       interval: 10s
@@ -59,6 +65,9 @@ services:
       - frontend
     restart: always
 
-
 volumes:
   postgres_data:
+
+secrets:
+  postgres_password:
+    file: ./postgres_password.txt  # This file should contain your superuser password

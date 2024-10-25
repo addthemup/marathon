@@ -23,7 +23,6 @@ DEBUG = ENVIRONMENT == 'development'
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
-# Database configuration based on environment
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
