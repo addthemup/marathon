@@ -24,15 +24,20 @@ RUN echo "Installing Python dependencies..." \
     && pip install --no-cache-dir -r /app/requirements.txt \
     && echo "Python dependencies installed successfully."
 
-# Copy the application code with debug info
+# Copy the application code
 COPY . /app
 RUN echo "Application code copied to /app."
-
-# Ensure the entrypoint script is executable
-RUN chmod +x /app/backend/entrypoint.sh
 
 # Expose the application's port
 EXPOSE 8000
 
-# Run the entrypoint script
-ENTRYPOINT ["/app/backend/entrypoint.sh"]
+# Default command to start the Django server
+CMD ["sh", "-c", "\
+    echo 'Waiting for the database...' && \
+    while ! nc -z db 5432; do sleep 1; done && \
+    echo 'Database started' && \
+    python manage.py migrate --noinput && \
+    python manage.py loaddata data.json && \
+    python manage.py collectstatic --noinput && \
+    gunicorn --bind 0.0.0.0:8000 --workers 3 --log-level info backend.wsgi:application \
+"]

@@ -15,7 +15,6 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Wait for db to pass health check
-    command: ["/app/backend/entrypoint.sh"]  # Make sure entrypoint.sh has execute permission
     restart: always
 
   frontend:
