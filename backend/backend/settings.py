@@ -9,20 +9,21 @@ load_dotenv()
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Secret key
+# Secret key configuration
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-key')
-
 if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
 
 # Environment setting (production or development)
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
-
-# Set debug based on the environment
 DEBUG = ENVIRONMENT == 'development'
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+# Allowed hosts based on environment
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if ENVIRONMENT == 'production':
+    ALLOWED_HOSTS += ['137.184.223.198', 'admwyn.com', 'www.admwyn.com']
 
+# Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -30,7 +31,7 @@ DATABASES = {
         'USER': os.getenv('DJANGO_DB_USER', 'awc'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
         'HOST': os.getenv('DJANGO_DB_HOST', 'localhost' if ENVIRONMENT == 'development' else 'db'),
-        'PORT': '5432',
+        'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
     }
 }
 
@@ -71,9 +72,20 @@ MIDDLEWARE = [
 # URL configuration
 ROOT_URLCONF = 'backend.urls'
 
-# Media settings
+# WSGI application
+WSGI_APPLICATION = 'backend.wsgi.application'
+
+# Static and media settings
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] if os.path.exists(os.path.join(BASE_DIR, 'static')) else []
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Custom user model
+AUTH_USER_MODEL = 'users.UserProfile'
 
 # Templates
 TEMPLATES = [
@@ -91,12 +103,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# WSGI application
-WSGI_APPLICATION = 'backend.wsgi.application'
-
-# Custom user model
-AUTH_USER_MODEL = 'users.UserProfile'
 
 # REST framework settings
 REST_FRAMEWORK = {
@@ -157,22 +163,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Allowed hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS += ['137.184.223.198', 'admwyn.com', 'www.admwyn.com']
-
-# Additional security settings for production
+# Production-specific security settings
 if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000

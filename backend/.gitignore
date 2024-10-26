@@ -1,0 +1,19 @@
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore environment variables file
+.env
+
+# Ignore database files (if using SQLite locally)
+db.sqlite3
+
+# Ignore local virtual environment
+venv/
+
+# Ignore static and media files generated in development
+static/
+media/
+
+# Ignore node_modules folder in frontend
+node_modules/

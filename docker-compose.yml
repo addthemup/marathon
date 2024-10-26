@@ -12,6 +12,9 @@ services:
       - ./backend/.env  # Ensure the .env file has the correct environment variables
     expose:
       - "8000"
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for db to pass health check
     command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--log-level", "info", "backend.wsgi:application"]
     restart: always
 
@@ -43,6 +46,7 @@ services:
     secrets:
       - postgres_password  # Secure handling of the default superuser password
 
+
   nginx:
     image: nginx:latest
     container_name: nginx_proxy
@@ -53,6 +57,9 @@ services:
       - ./backend/nginx.conf:/etc/nginx/nginx.conf:ro
       - static_volume:/app/staticfiles  # Serve static files from shared volume
       - media_volume:/app/media  # Serve media files from shared volume
+    depends_on:
+      backend:
+        condition: service_healthy  # Wait until backend is healthy
     restart: always
 
 volumes:
