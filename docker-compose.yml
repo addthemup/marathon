@@ -45,7 +45,12 @@ services:
     restart: always
     secrets:
       - postgres_password  # Secure handling of the default superuser password
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   nginx:
     image: nginx:latest
