@@ -1,9 +1,12 @@
 #!/bin/sh
 
+# Exit immediately if a command exits with a non-zero status
+set -e
+
 # Wait for the PostgreSQL database to be ready
 echo "Waiting for the database..."
 while ! nc -z db 5432; do
-  sleep 10
+  sleep 1  # Check every 1 second instead of 10
 done
 echo "Database started"
 
@@ -36,4 +39,4 @@ fi
 
 # Start the Gunicorn server with 3 workers
 echo "Starting Gunicorn server..."
-exec gunicorn --bind 0.0.0.0:8000 --workers 3 backend.wsgi:application
+exec gunicorn --bind 0.0.0.0:8000 --workers 3 --log-level info backend.wsgi:application

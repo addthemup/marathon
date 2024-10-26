@@ -6,6 +6,8 @@ services:
     container_name: django_app
     volumes:
       - ./backend:/app
+      - static_volume:/app/staticfiles  # Shared volume for static files
+      - media_volume:/app/media  # Shared volume for media files
     env_file:
       - ./backend/.env  # Ensure the .env file has the correct environment variables
     expose:
@@ -59,17 +61,17 @@ services:
       - "4443:443" # Map external port 4443 to container port 443
     volumes:
       - ./backend/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./backend/staticfiles:/app/staticfiles  # Serve static files
-      - ./backend/media:/app/media  # Serve media files
+      - static_volume:/app/staticfiles  # Serve static files from shared volume
+      - media_volume:/app/media  # Serve media files from shared volume
     depends_on:
       backend:
         condition: service_healthy  # Wait until backend is healthy
-      frontend:
-        condition: service_started  # Start after frontend is running
     restart: always
 
 volumes:
   postgres_data:
+  static_volume:  # Named volume for static files shared between backend and Nginx
+  media_volume:   # Named volume for media files shared between backend and Nginx
 
 secrets:
   postgres_password:
