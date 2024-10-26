@@ -46,8 +46,7 @@ services:
     environment:
       POSTGRES_DB: marathon
       POSTGRES_USER: awc
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password  # Use Docker secret for password
-      POSTGRES_INITDB_ARGS: "--username=postgres --pwfile=/run/secrets/postgres_password"
+      POSTGRES_PASSWORD: Starbury03
     ports:
       - "5432:5432"
     volumes:
