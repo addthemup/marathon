@@ -15,7 +15,7 @@ RUN echo "Updating package lists..." && apt-get update -qq \
     libpq-dev \
     build-essential \
     netcat-openbsd \
-    curl \  # Install curl for health checks and debugging
+    curl \ 
     && rm -rf /var/lib/apt/lists/* \
     && echo "System dependencies installed successfully."
 
