@@ -21,7 +21,7 @@ DEBUG = ENVIRONMENT == 'development'
 # Allowed hosts based on environment
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS += ['137.184.223.198', 'admwyn.com', 'www.admwyn.com']
+    ALLOWED_HOSTS += ['137.184.223.198', 'api.137.184.223.198', 'admwyn.com', 'www.admwyn.com']
 
 # Database configuration
 DATABASES = {
@@ -136,7 +136,7 @@ CORS_ALLOWED_ORIGINS = [
 if ENVIRONMENT == 'production':
     CORS_ALLOWED_ORIGINS += [
         'https://137.184.223.198',
-        'https://www.admwyn.com'
+        'https://www.admwyn.com',
     ]
 
 CORS_ALLOW_CREDENTIALS = True
