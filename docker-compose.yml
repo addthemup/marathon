@@ -45,7 +45,7 @@ services:
     container_name: postgres_db
     environment:
       POSTGRES_DB: marathon
-      POSTGRES_USER: awc
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Starbury03
     ports:
       - "5432:5432"
