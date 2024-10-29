@@ -19,7 +19,7 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
 # Allowed hosts based on environment
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django_app']
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS += ['137.184.223.198', 'api.137.184.223.198', 'admwyn.com', 'www.admwyn.com']
 
