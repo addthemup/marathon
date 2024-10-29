@@ -8,13 +8,14 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory
 WORKDIR /app
 
-# Install system dependencies and PostgreSQL client
+# Install system dependencies, PostgreSQL client, and curl
 RUN echo "Updating package lists..." && apt-get update -qq \
     && echo "Installing required packages..." \
     && apt-get install -y --no-install-recommends \
     libpq-dev \
     build-essential \
     netcat-openbsd \
+    curl \  # Install curl for health checks and debugging
     && rm -rf /var/lib/apt/lists/* \
     && echo "System dependencies installed successfully."
 
