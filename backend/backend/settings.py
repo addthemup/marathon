@@ -19,11 +19,20 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
 # Allowed hosts based on environment
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django_app']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1'
+]
+
+# Add internal Docker hostname only if not in production
+if ENVIRONMENT != 'production':
+    ALLOWED_HOSTS.append('django_app')
+
+# Add production-specific hosts
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS += [
-        '137.184.223.198',  # Server IP
-        'api.137.184.223.198',  # API subdomain
+        '137.184.223.198',   # Server IP
+        'api.137.184.223.198',  # API subdomain if required
         'admwyn.com', 'www.admwyn.com'  # Custom domain names
     ]
 

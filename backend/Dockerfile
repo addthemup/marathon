@@ -15,7 +15,7 @@ RUN echo "Updating package lists..." && apt-get update -qq \
     libpq-dev \
     build-essential \
     netcat-openbsd \
-    curl \ 
+    curl \
     && rm -rf /var/lib/apt/lists/* \
     && echo "System dependencies installed successfully."
 
@@ -32,7 +32,7 @@ RUN echo "Application code copied to /app."
 # Expose the application's port
 EXPOSE 8000
 
-# Default command to start the Django server
+# Default command to start the Django server with Gunicorn
 CMD ["sh", "-c", "\
     echo 'Waiting for the database...' && \
     while ! nc -z db 5432; do sleep 1; done && \
@@ -40,5 +40,5 @@ CMD ["sh", "-c", "\
     python manage.py migrate --noinput && \
     python manage.py loaddata data.json && \
     python manage.py collectstatic --noinput && \
-    gunicorn --bind 0.0.0.0:8000 --workers 3 --log-level info backend.wsgi:application \
+    gunicorn backend.wsgi:application --bind 0.0.0.0:8000 --workers 3 --log-level info \
 "]
