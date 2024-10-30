@@ -21,7 +21,11 @@ DEBUG = ENVIRONMENT == 'development'
 # Allowed hosts based on environment
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django_app']
 if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS += ['137.184.223.198', 'api.137.184.223.198', 'admwyn.com', 'www.admwyn.com']
+    ALLOWED_HOSTS += [
+        '137.184.223.198',  # Server IP
+        'api.137.184.223.198',  # API subdomain
+        'admwyn.com', 'www.admwyn.com'  # Custom domain names
+    ]
 
 # Database configuration
 DATABASES = {
@@ -35,7 +39,7 @@ DATABASES = {
     }
 }
 
-# Installed apps
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,7 +73,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-# URL configuration
+# Root URL configuration
 ROOT_URLCONF = 'backend.urls'
 
 # WSGI application
@@ -104,7 +108,7 @@ TEMPLATES = [
     },
 ]
 
-# REST framework settings
+# Django Rest Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -165,6 +169,21 @@ USE_TZ = True
 
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Logging configuration for debugging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG' if DEBUG else 'INFO',
+    },
+}
 
 # Production-specific security settings
 if ENVIRONMENT == 'production':
