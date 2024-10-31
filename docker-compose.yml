@@ -12,6 +12,8 @@ services:
       - ./backend/.env
     expose:
       - "8000"
+    ports:
+      - "8000:8000"  # Expose container port 8000 to host port 8000
     depends_on:
       db:
         condition: service_healthy
