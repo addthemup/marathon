@@ -144,6 +144,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://admwyn.com',
+    'https://www.admwyn.com',
+    'https://api.admwyn.com',
 ]
 
 if ENVIRONMENT == 'production':
@@ -160,6 +162,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://admwyn.com',
     'http://137.184.223.198',
     'https://www.admwyn.com',
+    'https://api.admwyn.com',
 ]
 
 # Password validators
