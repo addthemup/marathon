@@ -19,7 +19,7 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
 # Allowed Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'backend']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'admwyn.com', 'www.admwyn.com', 'backend', 'django_app']
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS += [
         '137.184.223.198', 'api.137.184.223.198',
@@ -182,11 +182,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG' if DEBUG else 'INFO',
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'django.db.backends': {  # Enable database debug logging
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
     },
 }
+
 
 # Production-specific security settings
 if ENVIRONMENT == 'production':
