@@ -22,7 +22,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--log-level", "info", "backend.wsgi:application"]
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120",  "--log-level", "info", "backend.wsgi:application"]
     restart: always
 
   frontend:
