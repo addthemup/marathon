@@ -202,7 +202,7 @@ LOGGING = {
 
 # Production-specific security settings
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
