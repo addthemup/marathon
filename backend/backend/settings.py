@@ -9,34 +9,22 @@ load_dotenv()
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Secret key configuration
+# Secret Key
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-key')
 if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
 
-# Environment setting (production or development)
+# Environment Settings
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
-# Allowed hosts based on environment
-ALLOWED_HOSTS = [
-    'localhost', 
-    '127.0.0.1',
-    '0.0.0.0',
-    'backend',
-]
-
-# Add internal Docker hostname only if not in production
-if ENVIRONMENT != 'production':
-    ALLOWED_HOSTS.append('django_app')
-
-# Add production-specific hosts
+# Allowed Hosts
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'backend']
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS += [
-        '137.184.223.198', 
-        'api.137.184.223.198',  
+        '137.184.223.198', 'api.137.184.223.198',
         'admwyn.com', 'www.admwyn.com',
-        '0.0.0.0'
+        'backend', 'django_app'
     ]
 
 # Database configuration
@@ -202,7 +190,7 @@ LOGGING = {
 
 # Production-specific security settings
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = False
+    SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
