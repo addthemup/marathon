@@ -23,8 +23,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'admwyn.com', 'www.admwyn.com', 'back
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS += [
         '137.184.223.198', 'api.137.184.223.198',
-        'admwyn.com', 'www.admwyn.com',
-        'backend', 'django_app'
     ]
 
 # Database configuration
@@ -75,8 +73,6 @@ MIDDLEWARE = [
 
 # Root URL configuration
 ROOT_URLCONF = 'backend.urls'
-
-# WSGI application
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Static and media settings
@@ -142,7 +138,6 @@ CORS_ALLOWED_ORIGINS = [
 if ENVIRONMENT == 'production':
     CORS_ALLOWED_ORIGINS += [
         'https://137.184.223.198',
-        'https://www.admwyn.com',
     ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -185,19 +180,18 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
         },
         'django.db.backends': {  # Enable database debug logging
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
         },
     },
 }
 
-
 # Production-specific security settings
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False  # Set to False to prevent redirect loops; Nginx handles HTTPS redirection
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
