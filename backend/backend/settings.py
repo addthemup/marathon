@@ -22,7 +22,8 @@ DEBUG = ENVIRONMENT == 'development'
 ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1',
-    '0.0.0.0'
+    '0.0.0.0',
+    'backend',
 ]
 
 # Add internal Docker hostname only if not in production
@@ -32,9 +33,9 @@ if ENVIRONMENT != 'production':
 # Add production-specific hosts
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS += [
-        '137.184.223.198',   # Server IP
-        'api.137.184.223.198',  # API subdomain if required
-        'admwyn.com', 'www.admwyn.com',  # Custom domain names
+        '137.184.223.198', 
+        'api.137.184.223.198',  
+        'admwyn.com', 'www.admwyn.com',
         '0.0.0.0'
     ]
 
