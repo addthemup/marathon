@@ -16,11 +16,11 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--log-level", "info", "backend.wsgi:application"]
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "--timeout", "120", "--log-level", "info", "backend.wsgi:application"]
     restart: always
 
   frontend:
