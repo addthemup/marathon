@@ -10,10 +10,6 @@ services:
       - media_volume:/app/media
     env_file:
       - ./backend/.env
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"  # Expose container port 8000 to host port 8000
     depends_on:
       db:
         condition: service_healthy
@@ -22,7 +18,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120",  "--log-level", "info", "backend.wsgi:application"]
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--log-level", "info", "backend.wsgi:application"]
     restart: always
 
   frontend:
@@ -30,14 +26,12 @@ services:
     container_name: react_app
     volumes:
       - ./frontend:/app
-    expose:
-      - "5173"
     environment:
       - HOST=0.0.0.0
     command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:80/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -49,8 +43,6 @@ services:
       POSTGRES_DB: marathon
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Starbury03
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
@@ -71,7 +63,7 @@ services:
       - ./backend/nginx.conf:/etc/nginx/nginx.conf:ro
       - static_volume:/app/staticfiles
       - media_volume:/app/media
-      - /etc/letsencrypt:/etc/letsencrypt  # Adding Let's Encrypt certificates to the Nginx container
+      - /etc/letsencrypt:/etc/letsencrypt:ro  # Read-only access for SSL certs
     depends_on:
       backend:
         condition: service_healthy
@@ -86,7 +78,3 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
-
-secrets:
-  postgres_password:
-    file: ./postgres_password.txt
