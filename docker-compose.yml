@@ -1,5 +1,3 @@
-# docker-compose.yml - Updated to use a unified settings.py
-
 version: '3.8'
 
 services:
@@ -16,8 +14,7 @@ services:
     expose:
       - "8000"
     depends_on:
-      db:
-        condition: service_healthy
+      - db  # Simple dependency without health condition
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health/ || exit 1"]
       interval: 30s
@@ -29,16 +26,18 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod  # Specify production Dockerfile for production builds
+      dockerfile: Dockerfile.prod
     container_name: react_app
     ports:
       - "80:80"
     restart: always
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=512"  # Limit memory usage for Vite
 
   frontend_dev:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev  # Specify development Dockerfile for development builds
+      dockerfile: Dockerfile.dev
     container_name: react_app_dev
     ports:
       - "5173:5173"
@@ -64,7 +63,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U awc || exit 1"]  # Match the correct user for pg_isready
       interval: 10s
       timeout: 5s
       retries: 5
@@ -81,8 +80,7 @@ services:
       - media_volume:/app/media
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend  # No health condition
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
