@@ -1,8 +1,11 @@
+# docker-compose.yml - Updated to support multiple Dockerfiles for frontend
+
 version: '3.8'
 
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
     container_name: django_app
     volumes:
       - ./backend:/app
@@ -20,17 +23,27 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "--timeout", "120", "--log-level", "info", "backend.wsgi:application"]
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--log-level", "info", "backend.wsgi:application"]
     restart: always
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod  # Specify production Dockerfile for production builds
     container_name: react_app
-    expose:
-      - "5173"
+    ports:
+      - "80:80"
+    restart: always
+
+  frontend_dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev  # Specify development Dockerfile for development builds
+    container_name: react_app_dev
+    ports:
+      - "5173:5173"
     environment:
       - HOST=0.0.0.0
-    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
@@ -41,10 +54,10 @@ services:
   db:
     image: postgres:13
     container_name: postgres_db
+    env_file:
+      - ./backend/.env
     environment:
       POSTGRES_DB: marathon
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Starbury03
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
@@ -59,7 +72,6 @@ services:
     image: nginx:latest
     container_name: nginx_proxy
     ports:
-      - "80:80"
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
