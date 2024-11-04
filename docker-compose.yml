@@ -26,7 +26,7 @@ services:
       dockerfile: Dockerfile.prod  # Specify production Dockerfile for production builds
     container_name: react_app
     ports:
-      - "80:80"
+      - "8080:80"
     restart: always
 
   frontend_dev:
