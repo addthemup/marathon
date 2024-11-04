@@ -1,11 +1,23 @@
+# Start from an official Node image
 FROM node:16-alpine
 
+# Set the working directory
 WORKDIR /app
-COPY package.json yarn.lock /app/
-RUN yarn install
 
+# Copy package.json to install dependencies
+COPY package.json /app/
+
+# Install dependencies using npm
+RUN npm install
+
+# Copy the rest of the application code
 COPY . /app
-RUN yarn build
 
+# Build the application
+RUN npm run build
+
+# Expose the port the app runs on
 EXPOSE 3000
-CMD ["yarn", "serve"]
+
+# Serve the application
+CMD ["npm", "run", "preview"]
