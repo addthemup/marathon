@@ -1,5 +1,5 @@
-# Use a slim Python base image for building the dependencies
-FROM python:3.10-slim as builder
+# Use a slim Python base image
+FROM python:3.10-slim
 
 # Environment variables to prevent Python from writing pyc files and enable unbuffered stdout
 ENV PYTHONDONTWRITEBYTECODE=1 
@@ -9,37 +9,30 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies, PostgreSQL client, and curl
-RUN apt-get update -qq \
+RUN echo "Updating package lists..." && apt-get update -qq \
+    && echo "Installing required packages..." \
     && apt-get install -y --no-install-recommends \
     libpq-dev \
     build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+    netcat-openbsd \
+    curl \  # Install curl for health checks and debugging
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "System dependencies installed successfully."
 
 # Install Python dependencies
 COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN echo "Installing Python dependencies..." \
+    && pip install --no-cache-dir -r /app/requirements.txt \
+    && echo "Python dependencies installed successfully."
 
-# Use a second stage to minimize the final image size
-FROM python:3.10-slim
-
-# Set the working directory
-WORKDIR /app
-
-# Copy only necessary application files
-COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-# Copy the application code (excluding unnecessary files using .dockerignore)
+# Copy the application code
 COPY . /app
-
-# Environment variables
-ENV PATH="/usr/local/bin:$PATH"
+RUN echo "Application code copied to /app."
 
 # Expose the application's port
 EXPOSE 8000
 
-# Default command to start the Django server with Gunicorn
+# Default command to start the Django server
 CMD ["sh", "-c", "\
     echo 'Waiting for the database...' && \
     while ! nc -z db 5432; do sleep 1; done && \
@@ -47,5 +40,5 @@ CMD ["sh", "-c", "\
     python manage.py migrate --noinput && \
     python manage.py loaddata data.json && \
     python manage.py collectstatic --noinput && \
-    gunicorn backend.wsgi:application --bind 0.0.0.0:8000 --workers 3 --log-level info \
+    gunicorn --bind 0.0.0.0:8000 --workers 3 --log-level info backend.wsgi:application \
 "]
