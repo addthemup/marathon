@@ -13,12 +13,13 @@ services:
       - marathon_net
       
   django:
-    build: ./backend
+    build:
+      context: ./backend
+      args:
+        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     volumes:
       - ./backend:/app
     command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
-    env_file:  # Add this line
-      - .env   # Add this line to load environment variables
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DB_HOST: db
@@ -26,7 +27,7 @@ services:
       DJANGO_DB_USER: ${DJANGO_DB_USER}
       DJANGO_DB_PASSWORD: ${DJANGO_DB_PASSWORD}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DJANGO_SETTINGS_MODULE: backend.settings  # Added for settings reference
+      DJANGO_SETTINGS_MODULE: backend.settings  # <-- Add this line
     depends_on:
       - db
     ports:
