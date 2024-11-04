@@ -11,15 +11,12 @@ services:
       POSTGRES_PASSWORD: ${DJANGO_DB_PASSWORD}
     networks:
       - marathon_net
-
+      
   django:
-    build:
-      context: ./backend
-      args:
-        DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+    build: ./backend
     volumes:
       - ./backend:/app
-    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application  # Use python manage.py runserver for development
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DB_HOST: db
@@ -27,6 +24,7 @@ services:
       DJANGO_DB_USER: ${DJANGO_DB_USER}
       DJANGO_DB_PASSWORD: ${DJANGO_DB_PASSWORD}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DJANGO_SETTINGS_MODULE: backend.settings  # Added for settings reference
     depends_on:
       - db
     ports:
