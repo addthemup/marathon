@@ -18,8 +18,8 @@ if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
-# Allowed Hosts
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,admwyn.com,www.admwyn.com').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,137.184.223.198,admwyn.com,www.admwyn.com').split(',')
+
 
 
 # Database configuration
@@ -171,7 +171,7 @@ LOGGING = {
 
 # Production-specific security settings
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = True  
+    SECURE_SSL_REDIRECT = False
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
