@@ -125,8 +125,11 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') + [
+    'https://137.184.223.198',
+    'https://admwyn.com',
+]
+
 
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [
