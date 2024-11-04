@@ -1,27 +1,11 @@
-# Use an official Node.js runtime as the base image
-FROM node:18-alpine
+FROM node:16-alpine
 
-# Set the working directory inside the container
 WORKDIR /app
+COPY package.json yarn.lock /app/
+RUN yarn install
 
-# Install curl for health checks
-RUN apk --no-cache add curl
+COPY . /app
+RUN yarn build
 
-# Copy package.json and package-lock.json for better caching of npm install
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install --legacy-peer-deps
-
-# Copy the rest of the application files to the container
-COPY . .
-
-# Expose the port Vite uses
-EXPOSE 5173
-
-# Health check for debugging purposes
-HEALTHCHECK --interval=10s --timeout=5s --start-period=10s \
-    CMD curl -f http://localhost:5173/ || exit 1
-
-# Start the Vite development server, accessible from outside
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+EXPOSE 3000
+CMD ["yarn", "serve"]
