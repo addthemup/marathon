@@ -1,5 +1,5 @@
 # Use a slim Python base image
-FROM python:3.10-slim
+FROM python:3.10-slim as builder
 
 # Environment variables to prevent Python from writing pyc files and enable unbuffered stdout
 ENV PYTHONDONTWRITEBYTECODE=1 
@@ -18,13 +18,19 @@ RUN apt-get update -qq \
 
 # Install Python dependencies
 COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install --user --no-cache-dir -r /app/requirements.txt
 
-# Add a non-root user for better security
-RUN adduser --disabled-password --gecos '' appuser
-USER appuser
+# Use a second stage to minimize final image size
+FROM python:3.10-slim
 
-# Copy the application code
+# Set the working directory
+WORKDIR /app
+
+# Copy the installed dependencies from the builder stage
+COPY --from=builder /root/.local /root/.local
+ENV PATH=/root/.local/bin:$PATH
+
+# Copy only necessary application files
 COPY . /app
 
 # Expose the application's port
