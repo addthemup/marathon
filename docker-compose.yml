@@ -23,7 +23,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod  # Specify production Dockerfile for production builds
+      dockerfile: Dockerfile.prod
     container_name: react_app
     ports:
       - "8080:80"
@@ -32,7 +32,7 @@ services:
   frontend_dev:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev  # Specify development Dockerfile for development builds
+      dockerfile: Dockerfile.dev
     container_name: react_app_dev
     ports:
       - "5173:5173"
