@@ -1,4 +1,4 @@
-# Use a slim Python base image
+# Use a slim Python base image for building the dependencies
 FROM python:3.10-slim as builder
 
 # Environment variables to prevent Python from writing pyc files and enable unbuffered stdout
@@ -18,20 +18,23 @@ RUN apt-get update -qq \
 
 # Install Python dependencies
 COPY requirements.txt /app/requirements.txt
-RUN pip install --user --no-cache-dir -r /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Use a second stage to minimize final image size
+# Use a second stage to minimize the final image size
 FROM python:3.10-slim
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the installed dependencies from the builder stage
-COPY --from=builder /root/.local /root/.local
-ENV PATH=/root/.local/bin:$PATH
-
 # Copy only necessary application files
+COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy the application code (excluding unnecessary files using .dockerignore)
 COPY . /app
+
+# Environment variables
+ENV PATH="/usr/local/bin:$PATH"
 
 # Expose the application's port
 EXPOSE 8000
