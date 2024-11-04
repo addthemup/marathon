@@ -1,4 +1,4 @@
-# docker-compose.yml - Updated to support multiple Dockerfiles for frontend
+# docker-compose.yml - Updated to use a unified settings.py
 
 version: '3.8'
 

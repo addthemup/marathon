@@ -17,3 +17,6 @@ media/
 
 # Ignore node_modules folder in frontend
 node_modules/
+
+./backend/.env/
+backend/.env
