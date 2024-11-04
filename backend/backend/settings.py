@@ -10,7 +10,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Secret Key
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-key')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
 
@@ -19,13 +19,7 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
 # Allowed Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'admwyn.com', 'www.admwyn.com', 'backend', 'django_app']
-if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS += [
-        '137.184.223.198', 'api.137.184.223.198',
-        'admwyn.com', 'www.admwyn.com',
-        'backend', 'django_app'
-    ]
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Database configuration
 DATABASES = {
@@ -63,6 +57,7 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,23 +65,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 # Root URL configuration
 ROOT_URLCONF = 'backend.urls'
-
-# WSGI application
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Static and media settings
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] if os.path.exists(os.path.join(BASE_DIR, 'static')) else []
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Custom user model
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -129,32 +121,11 @@ SIMPLE_JWT = {
 }
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://admwyn.com',
-    'https://www.admwyn.com',
-    'https://api.admwyn.com',
-]
-
-if ENVIRONMENT == 'production':
-    CORS_ALLOWED_ORIGINS += [
-        'https://137.184.223.198',
-        'https://www.admwyn.com',
-    ]
-
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',
-    'https://admwyn.com',
-    'http://137.184.223.198',
-    'https://www.admwyn.com',
-    'https://api.admwyn.com',
-]
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -185,21 +156,21 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
         },
         'django.db.backends': {  # Enable database debug logging
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
         },
     },
 }
 
-
 # Production-specific security settings
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = True  
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+    SECURE_BROWSER_XSS_FILTER = True

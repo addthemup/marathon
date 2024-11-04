@@ -9,25 +9,23 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies, PostgreSQL client, and curl
-RUN echo "Updating package lists..." && apt-get update -qq \
-    && echo "Installing required packages..." \
+RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends \
     libpq-dev \
     build-essential \
-    netcat-openbsd \
     curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "System dependencies installed successfully."
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY requirements.txt /app/requirements.txt
-RUN echo "Installing Python dependencies..." \
-    && pip install --no-cache-dir -r /app/requirements.txt \
-    && echo "Python dependencies installed successfully."
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Add a non-root user for better security
+RUN adduser --disabled-password --gecos '' appuser
+USER appuser
 
 # Copy the application code
 COPY . /app
-RUN echo "Application code copied to /app."
 
 # Expose the application's port
 EXPOSE 8000
