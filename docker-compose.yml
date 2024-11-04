@@ -47,6 +47,8 @@ services:
       - ./backend/.env
     environment:
       POSTGRES_DB: marathon
+      POSTGRES_USER: awc
+      POSTGRES_PASSWORD: Starbury03  # Ensure this is defined here or in .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
