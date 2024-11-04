@@ -1,7 +1,7 @@
 # Dockerfile.prod - Production Dockerfile for Frontend
 
-# Use an official Node.js runtime as the base image for building the app
-FROM node:18-alpine as build
+# Stage 1: Base image for dependencies
+FROM node:18-alpine as base
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -9,8 +9,11 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies only
 RUN npm install --legacy-peer-deps
+
+# Stage 2: Build stage
+FROM base as build
 
 # Copy the entire project to the container
 COPY . .
@@ -18,7 +21,7 @@ COPY . .
 # Build the app for production
 RUN npm run build
 
-# Production stage - Use Nginx to serve the static files
+# Stage 3: Production stage - Use Nginx to serve the static files
 FROM nginx:alpine as production
 
 # Copy build files from the previous stage
