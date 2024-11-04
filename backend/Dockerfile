@@ -21,7 +21,7 @@ COPY . /app/
 ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 
 # Collect static files and expose the app
-RUN python manage.py collectstatic --noinput
+RUN env && python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Run the Django server

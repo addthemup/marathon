@@ -16,7 +16,9 @@ services:
     build: ./backend
     volumes:
       - ./backend:/app
-    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application  # Use python manage.py runserver for development
+    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+    env_file:  # Add this line
+      - .env   # Add this line to load environment variables
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DB_HOST: db

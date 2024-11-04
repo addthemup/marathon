@@ -13,6 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
+print(f"SECRET_KEY: {SECRET_KEY}")  # Add this line for debugging purposes
+
 
 # Environment Settings
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
