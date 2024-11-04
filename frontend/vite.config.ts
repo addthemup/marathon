@@ -4,8 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    minify: false,     // Disable minification for testing
-    sourcemap: false,  // Disable sourcemaps to reduce build load
+    minify: true, 
   },
   plugins: [react()],
   server: {

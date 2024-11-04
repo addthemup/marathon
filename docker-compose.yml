@@ -14,7 +14,7 @@ services:
     expose:
       - "8000"
     depends_on:
-      - db  # Simple dependency without health condition
+      - db  
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health/ || exit 1"]
       interval: 30s
@@ -63,7 +63,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U awc || exit 1"]  # Match the correct user for pg_isready
+      test: ["CMD-SHELL", "pg_isready -U awc || exit 1"]  
       interval: 10s
       timeout: 5s
       retries: 5
@@ -80,7 +80,7 @@ services:
       - media_volume:/app/media
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
-      - backend  # No health condition
+      - backend  
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
