@@ -18,6 +18,7 @@ if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+# Allowed Hosts
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,137.184.223.198,admwyn.com,www.admwyn.com').split(',')
 
 # Database configuration
@@ -126,6 +127,21 @@ CORS_ALLOW_CREDENTIALS = True
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://137.184.223.198,https://admwyn.com,https://www.admwyn.com').split(',')
 
+# Security and HTTPS settings
+if ENVIRONMENT == 'production':
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_BROWSER_XSS_FILTER = True
+
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -143,7 +159,7 @@ USE_TZ = True
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Logging configuration for debugging
+# Logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -151,25 +167,20 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/django.log',
+            'level': 'ERROR',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG' if DEBUG else 'INFO',
         },
         'django.db.backends': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG' if DEBUG else 'INFO',
         },
     },
 }
-
-# Production-specific security settings
-if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = True  # Enforce HTTPS
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
-    SECURE_BROWSER_XSS_FILTER = True
