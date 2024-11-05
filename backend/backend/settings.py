@@ -13,16 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
-print(f"SECRET_KEY: {SECRET_KEY}")  # Add this line for debugging purposes
-
 
 # Environment Settings
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
-DEBUG = ENVIRONMENT == 'development'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,137.184.223.198,admwyn.com,www.admwyn.com').split(',')
-
-
 
 # Database configuration
 DATABASES = {
@@ -124,14 +120,11 @@ SIMPLE_JWT = {
 }
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'https://admwyn.com,https://www.admwyn.com').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') + [
-    'https://137.184.223.198',
-    'https://admwyn.com',
-]
-
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://137.184.223.198,https://admwyn.com,https://www.admwyn.com').split(',')
 
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -164,7 +157,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG' if DEBUG else 'INFO',
         },
-        'django.db.backends': {  # Enable database debug logging
+        'django.db.backends': {
             'handlers': ['console'],
             'level': 'DEBUG' if DEBUG else 'INFO',
         },
@@ -173,7 +166,7 @@ LOGGING = {
 
 # Production-specific security settings
 if ENVIRONMENT == 'production':
-    SECURE_SSL_REDIRECT = False
+    SECURE_SSL_REDIRECT = True  # Enforce HTTPS
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True

@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     minify: false, // Disable minification for debugging
     rollupOptions: {
-      external: ['@nivo/core'], // Externalize specific imports if they are causing build issues
+      external: ['@nivo/core'], // Externalize if the import is still causing issues
     },
   },
   server: {
@@ -14,11 +14,8 @@ export default defineConfig({
     port: 5173,
     strictPort: true, // Ensure the port doesn't fallback if 5173 is in use
     hmr: {
-      host: '137.184.223.198', // Replace with your server's public IP address
+      host: '137.184.223.198', // Your public IP
       port: 5173, // Ensure HMR runs on the correct port
-    },
-    watch: {
-      usePolling: true, // Useful for Docker environments where file changes may not be picked up correctly
     },
   },
 });

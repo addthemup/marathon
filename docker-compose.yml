@@ -1,51 +1,35 @@
-version: '3'
+version: '3.8'
 
 services:
   db:
     image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: ${DJANGO_DB_NAME}
-      POSTGRES_USER: ${DJANGO_DB_USER}
-      POSTGRES_PASSWORD: ${DJANGO_DB_PASSWORD}
+      POSTGRES_USER: postgres  # Default superuser
+      POSTGRES_PASSWORD: postgres_password_here  # Replace with your secure password
+      POSTGRES_DB: marathon  # Default database for Django to use
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Custom SQL commands for user setup
     networks:
-      - marathon_net
+      - webnet
 
-  django:
+  backend:
     build:
       context: ./backend
-      args:
-        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+    command: ["/app/entrypoint.sh"]  # Use custom entrypoint script for Django
     volumes:
       - ./backend:/app
-    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
-    environment:
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-      DJANGO_DB_HOST: db
-      DJANGO_DB_NAME: ${DJANGO_DB_NAME}
-      DJANGO_DB_USER: ${DJANGO_DB_USER}
-      DJANGO_DB_PASSWORD: ${DJANGO_DB_PASSWORD}
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DJANGO_SETTINGS_MODULE: backend.settings
-    depends_on:
-      - db
+    env_file:
+      - ./backend/.env
     ports:
       - "8000:8000"
+    depends_on:
+      - db
     networks:
-      - marathon_net
-
-  frontend:
-    build: ./frontend
-    volumes:
-      - ./frontend:/app
-    ports:
-      - "5173:5173"
-    networks:
-      - marathon_net
-
-networks:
-  marathon_net:
+      - webnet
 
 volumes:
   postgres_data:
+
+networks:
+  webnet:
