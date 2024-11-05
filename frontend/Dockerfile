@@ -9,7 +9,9 @@ COPY package.json /app/
 RUN npm install --legacy-peer-deps
 
 # Install Vite globally so it's available everywhere
-RUN npm install -g vite@5.4.10 --legacy-peer-deps
+RUN npm install -g vite
+
+RUN npm install @vitejs/plugin-react --force
 
 # Copy the rest of the application code
 COPY . /app
