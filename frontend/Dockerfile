@@ -1,5 +1,5 @@
-# Use the latest Node.js image
-FROM node:16-alpine
+# Use Node.js version 18 to match Vite requirements
+FROM node:18-alpine
 
 # Set the working directory
 WORKDIR /app
