@@ -1,21 +1,21 @@
+# Dockerfile
 FROM python:3.10-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy requirements.txt first, for separate dependency installation
+# Copy and install dependencies
 COPY requirements.txt /app/
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copy application code
 COPY . /app/
 
-# Set build argument for Django secret key
-ARG DJANGO_SECRET_KEY
-ENV DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+# Copy and prepare entrypoint script
+COPY ./backend/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Collect static files and expose the app
-RUN python manage.py collectstatic --noinput
+# Expose the application port
 EXPOSE 8000
+
+# Use entrypoint.sh as the main entrypoint, which handles Gunicorn startup
+ENTRYPOINT ["/entrypoint.sh"]
