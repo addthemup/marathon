@@ -16,10 +16,10 @@ if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
 
 # Environment Settings
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = ENVIRONMENT == 'development'
 
 # Allowed Hosts
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,137.184.223.198,admwyn.com,www.admwyn.com').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Database configuration
 DATABASES = {
@@ -28,7 +28,7 @@ DATABASES = {
         'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),
         'USER': os.getenv('DJANGO_DB_USER', 'awc'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
-        'HOST': os.getenv('DJANGO_DB_HOST', 'localhost' if ENVIRONMENT == 'development' else 'db'),
+        'HOST': 'localhost' if ENVIRONMENT == 'development' else os.getenv('DJANGO_DB_HOST', 'db'),
         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
     }
 }
