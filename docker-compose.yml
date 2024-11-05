@@ -4,25 +4,25 @@ services:
   db:
     image: postgres:13
     environment:
-      POSTGRES_USER: postgres  # Default superuser
-      POSTGRES_PASSWORD: postgres_password_here  # Replace with your secure password
-      POSTGRES_DB: marathon  # Default database for Django to use
+      POSTGRES_USER: postgres  # Default superuser for PostgreSQL
+      POSTGRES_PASSWORD: postgres_password_here  # Replace with a secure password
+      POSTGRES_DB: marathon  # Database that Django will use
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Custom SQL commands for user setup
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Initialization SQL for user setup
     networks:
       - webnet
 
   backend:
     build:
       context: ./backend
-    command: ["/app/entrypoint.sh"]  # Use custom entrypoint script for Django
+    command: ["/app/entrypoint.sh"]  # Custom entrypoint script for migrations and setup
     volumes:
       - ./backend:/app
     env_file:
       - ./backend/.env
     ports:
-      - "8000:8000"
+      - "8000:8000"  # Exposing Django on port 8000 internally
     depends_on:
       - db
     networks:
