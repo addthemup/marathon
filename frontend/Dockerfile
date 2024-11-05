@@ -7,7 +7,9 @@ WORKDIR /app
 # Copy package.json and yarn.lock (if applicable) and install dependencies
 COPY package.json /app/
 RUN npm install --legacy-peer-deps
-RUN npm install vite --force
+
+RUN npm install -g vite --force
+
 
 # Copy the rest of the application code
 COPY . /app
