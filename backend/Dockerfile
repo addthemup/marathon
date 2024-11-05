@@ -3,19 +3,17 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy and install dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . /app/
+# Install PostgreSQL client tools
+RUN apt-get update && apt-get install -y postgresql-client
 
-# Copy and prepare entrypoint script
+COPY . /app/
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Expose the application port
 EXPOSE 8000
 
-# Use entrypoint.sh as the main entrypoint, which handles Gunicorn startup
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
