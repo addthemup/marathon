@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json /app/
 RUN npm install --legacy-peer-deps
 
-RUN npm install -g vite --force
+RUN npm install vite --legacy-peer-deps
 
 
 # Copy the rest of the application code
