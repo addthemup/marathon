@@ -7,6 +7,7 @@ WORKDIR /app
 # Copy package.json and yarn.lock (if applicable) and install dependencies
 COPY package.json /app/
 RUN npm install --legacy-peer-deps
+RUN npm install vite --force
 
 # Copy the rest of the application code
 COPY . /app
@@ -15,4 +16,5 @@ COPY . /app
 RUN npm run build
 
 # Serve the application
-CMD ["npx", "vite", "preview"]  # Use npx to run Vite without installing globally
+EXPOSE 5173
+CMD ["npx", "vite", "preview"]

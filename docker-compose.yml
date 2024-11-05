@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${DJANGO_DB_PASSWORD}
     networks:
       - marathon_net
-      
+
   django:
     build:
       context: ./backend
@@ -27,7 +27,7 @@ services:
       DJANGO_DB_USER: ${DJANGO_DB_USER}
       DJANGO_DB_PASSWORD: ${DJANGO_DB_PASSWORD}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DJANGO_SETTINGS_MODULE: backend.settings  # <-- Add this line
+      DJANGO_SETTINGS_MODULE: backend.settings
     depends_on:
       - db
     ports:
