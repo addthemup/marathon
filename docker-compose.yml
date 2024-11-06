@@ -36,13 +36,10 @@ services:
       dockerfile: Dockerfile  # Dockerfile for building the Vite frontend
     environment:
       - NODE_ENV=production
-    volumes:
-      - /var/www/marathon_static:/usr/share/nginx/html  # Mount for serving static files in Nginx
     depends_on:
       - backend
     networks:
       - webnet
-
 
 volumes:
   postgres_data:
