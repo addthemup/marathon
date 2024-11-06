@@ -30,6 +30,21 @@ services:
     networks:
       - webnet
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile  # Dockerfile for building the Vite frontend
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./frontend:/app  # For development, this will map the frontend folder
+      - /var/www/marathon_static:/app/dist  # Where the built files are located
+    command: ["npm", "run", "build"]  # Run Vite build for production
+    depends_on:
+      - backend
+    networks:
+      - webnet
+
 volumes:
   postgres_data:
 
