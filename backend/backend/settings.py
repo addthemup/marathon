@@ -18,6 +18,7 @@ DEBUG = ENVIRONMENT == 'development'
 if not SECRET_KEY and ENVIRONMENT == 'production':
     raise ValueError("SECRET_KEY is not set in production!")
 
+# Allowed hosts
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Database configuration
@@ -27,13 +28,12 @@ DATABASES = {
         'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),
         'USER': os.getenv('DJANGO_DB_USER', 'awc'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
-        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),  # Ensure this is 'db'
+        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),
         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
     }
 }
 
-
-# Applications
+# Installed applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 ]
 
-# Middleware
+# Middleware configuration
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -75,7 +75,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Static and media files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
+if DEBUG:
+    STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
@@ -84,7 +85,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Custom user model
 AUTH_USER_MODEL = 'users.UserProfile'
 
-# Templates
+# Templates configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -125,7 +126,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'https://admwyn.com,https://www.admwyn.com').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF settings
+# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://137.184.223.198,https://admwyn.com,https://www.admwyn.com').split(',')
 
 # Security and HTTPS settings for production
