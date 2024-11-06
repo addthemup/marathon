@@ -25,10 +25,10 @@ ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split('
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),
-        'USER': os.getenv('DJANGO_DB_USER', 'awc'),
-        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
-        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),
+        'NAME': os.getenv('DJANGO_DB_NAME'),
+        'USER': os.getenv('DJANGO_DB_USER'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD'),
+        'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),  # Default to localhost
         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
     }
 }
@@ -73,13 +73,12 @@ ROOT_URLCONF = 'backend.urls'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Static and media files
-STATIC_URL = '/static/'
+STATIC_URL = '/marathon/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [BASE_DIR / 'static'] if DEBUG and (BASE_DIR / 'static').exists() else []
 
-MEDIA_URL = '/media/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MEDIA_URL = '/marathon/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Custom user model
@@ -151,6 +150,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
+
+# Login redirects under /marathon prefix
+LOGIN_URL = '/marathon/admin/login/'
+LOGIN_REDIRECT_URL = '/marathon/admin/'
+LOGOUT_REDIRECT_URL = '/marathon/admin/login/'
 
 # Language and timezone
 LANGUAGE_CODE = 'en-us'
