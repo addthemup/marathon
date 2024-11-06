@@ -9,16 +9,15 @@ load_dotenv()
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Secret Key
+# Core settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-if not SECRET_KEY and os.getenv('ENVIRONMENT') == 'production':
-    raise ValueError("SECRET_KEY is not set in production!")
-
-# Environment Settings
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = ENVIRONMENT == 'development'
 
-# Allowed Hosts
+# Ensure SECRET_KEY is set in production
+if not SECRET_KEY and ENVIRONMENT == 'production':
+    raise ValueError("SECRET_KEY is not set in production!")
+
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Database configuration
@@ -33,7 +32,7 @@ DATABASES = {
     }
 }
 
-# Application definition
+# Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,13 +44,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'whitenoise.runserver_nostatic',
+    # Custom apps
     'blog',
-    'rest_framework_simplejwt.token_blacklist',
     'accounts',
     'brands',
     'reps',
     'sales',
     'users',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 # Middleware
@@ -67,11 +67,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Root URL configuration
+# URL and WSGI settings
 ROOT_URLCONF = 'backend.urls'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Static and media settings
+# Static and media files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
@@ -127,7 +127,7 @@ CORS_ALLOW_CREDENTIALS = True
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://137.184.223.198,https://admwyn.com,https://www.admwyn.com').split(',')
 
-# Security and HTTPS settings
+# Security and HTTPS settings for production
 if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000
@@ -150,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Language and timezone settings
+# Language and timezone
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -175,10 +175,6 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG' if DEBUG else 'INFO',
-        },
-        'django.db.backends': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG' if DEBUG else 'INFO',
         },
