@@ -74,12 +74,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Static and media files
 STATIC_URL = '/marathon/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static'] if DEBUG and (BASE_DIR / 'static').exists() else []
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/marathon/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+if os.getenv('ENVIRONMENT') == 'production':
+    STATIC_ROOT = '/var/www/marathon_static'
+    MEDIA_ROOT = '/var/www/marathon_media'
+else:  # Use local paths for development
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    MEDIA_ROOT = BASE_DIR / 'media'
+
+STATICFILES_DIRS = [BASE_DIR / 'static'] if DEBUG and (BASE_DIR / 'static').exists() else []
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Custom user model
 AUTH_USER_MODEL = 'users.UserProfile'
