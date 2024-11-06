@@ -27,7 +27,7 @@ DATABASES = {
         'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),
         'USER': os.getenv('DJANGO_DB_USER', 'awc'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
-        'HOST': 'localhost' if ENVIRONMENT == 'development' else os.getenv('DJANGO_DB_HOST', 'db'),
+        'HOST': 'db' if os.getenv('ENVIRONMENT') == 'production' else 'localhost',
         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
     }
 }
