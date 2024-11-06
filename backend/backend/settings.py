@@ -27,10 +27,11 @@ DATABASES = {
         'NAME': os.getenv('DJANGO_DB_NAME', 'marathon'),
         'USER': os.getenv('DJANGO_DB_USER', 'awc'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'Starbury03'),
-        'HOST': 'db' if os.getenv('ENVIRONMENT') == 'production' else 'localhost',
+        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),  # Ensure this is 'db'
         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
     }
 }
+
 
 # Applications
 INSTALLED_APPS = [
