@@ -37,13 +37,12 @@ services:
     environment:
       - NODE_ENV=production
     volumes:
-      - ./frontend:/app  # For development, this will map the frontend folder
-      - /var/www/marathon_static:/app/dist  # Where the built files are located
-    command: ["npm", "run", "build"]  # Run Vite build for production
+      - /var/www/marathon_static:/usr/share/nginx/html  # Mount for serving static files in Nginx
     depends_on:
       - backend
     networks:
       - webnet
+
 
 volumes:
   postgres_data:
