@@ -1,6 +1,9 @@
-const BASE_URL = "http://localhost:8000/api/reps/"; // Adjust if needed
+// /src/components/Api/RepsApi.tsx
 
-// Helper function to get authorization token
+// Define the base URL dynamically from environment variables
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/reps/`;
+
+// Helper function to get authorization headers
 const getAuthHeaders = () => ({
   'Content-Type': 'application/json',
   'Authorization': `Bearer ${localStorage.getItem('token')}`,

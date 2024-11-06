@@ -1,9 +1,12 @@
-const BASE_URL = 'http://localhost:8000/api/products/'; // Adjust base URL if necessary
+// /src/components/Api/ProductsApi.tsx
+
+// Define the base URL from the environment variables
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/products/`;
 
 // Helper function to get authorization headers
 const getAuthHeaders = () => ({
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're using JWT for authorization
+  'Authorization': `Bearer ${localStorage.getItem('token')}`,
 });
 
 // Define types for the data structures

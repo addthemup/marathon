@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:8000/api/users"; // Adjust if needed
+// Import the base API URL from environment variables
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/users`; // Uses the base URL from .env
 
 // Define the type for user registration data
 interface UserRegistrationData {
@@ -28,7 +29,7 @@ export const registerUser = async (userData: UserRegistrationData): Promise<any>
 
 // Login and get JWT token
 export const loginUser = async (username: string, password: string): Promise<any> => {
-  const response = await fetch("http://localhost:8000/api/token/", {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/token/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,4 +1,7 @@
-const BASE_URL = 'http://localhost:8000/api/sales/report/';  // Base URL for the sales report API
+// /src/components/Api/SalesReportsApi.tsx
+
+// Define the base URL dynamically from environment variables
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/sales/report/`;
 
 // Helper function to get authorization headers
 const getAuthHeaders = () => ({

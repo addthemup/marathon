@@ -127,11 +127,11 @@ SIMPLE_JWT = {
 }
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'https://admwyn.com,https://www.admwyn.com').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'https://admwyn.com,https://www.admwyn.com, http://localhost:5173/, http://localhost:8000').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://137.184.223.198,https://admwyn.com,https://www.admwyn.com').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://137.184.223.198,https://admwyn.com,https://www.admwyn.com, http://localhost:5173/').split(',')
 
 # Security and HTTPS settings for production
 if ENVIRONMENT == 'production':

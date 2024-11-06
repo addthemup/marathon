@@ -1,4 +1,7 @@
-const BASE_URL = "http://localhost:8000/api/dashboard/";
+// /src/components/Api/DashboardApi.tsx
+
+// Import the base API URL from environment variables
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/dashboard/`;
 
 // Helper function to get the authorization token from local storage
 const getAuthHeaders = () => ({
@@ -18,8 +21,7 @@ export const fetchGrossSalesYearlyYTD = async () => {
       throw new Error('Failed to fetch Gross Sales Yearly and YTD');
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Error fetching Gross Sales Yearly and YTD:', error);
     throw error;
@@ -38,8 +40,7 @@ export const fetchTopTenBranchAccountsYTD = async () => {
       throw new Error('Failed to fetch Top Ten Branch Accounts YTD');
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Error fetching Top Ten Branch Accounts YTD:', error);
     throw error;
@@ -58,8 +59,7 @@ export const fetchTopTenSalesRepsYTD = async () => {
       throw new Error('Failed to fetch Top Ten Sales Reps YTD');
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Error fetching Top Ten Sales Reps YTD:', error);
     throw error;
@@ -78,8 +78,7 @@ export const fetchTopBrandsYTD = async () => {
       throw new Error('Failed to fetch Top Brands YTD');
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Error fetching Top Brands YTD:', error);
     throw error;
@@ -88,20 +87,19 @@ export const fetchTopBrandsYTD = async () => {
 
 // Fetch Monthly Sales By Sales Rep
 export const fetchMonthlySalesBySalesRep = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}monthly-sales-by-sales-rep/`, {
-        method: 'GET',
-        headers: getAuthHeaders(),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch Monthly Sales by Sales Rep');
-      }
-  
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching Monthly Sales by Sales Rep:', error);
-      throw error;
+  try {
+    const response = await fetch(`${BASE_URL}monthly-sales-by-sales-rep/`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch Monthly Sales by Sales Rep');
     }
-  };
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching Monthly Sales by Sales Rep:', error);
+    throw error;
+  }
+};

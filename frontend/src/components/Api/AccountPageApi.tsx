@@ -1,6 +1,7 @@
-const BASE_URL = "http://localhost:8000/api"; 
+// Import the base API URL from environment variables
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/accounts`;
 
-// Helper function to get the authorization token
+// Helper function to get the authorization headers
 const getAuthHeaders = () => ({
   'Content-Type': 'application/json',
   'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -8,7 +9,7 @@ const getAuthHeaders = () => ({
 
 // Fetch account sales invoice by account ID
 export const fetchAccountSalesInvoice = async (accountId: number) => {
-  const response = await fetch(`${BASE_URL}/accounts/${accountId}/sales-invoice/`, {
+  const response = await fetch(`${BASE_URL}/${accountId}/sales-invoice/`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -22,7 +23,7 @@ export const fetchAccountSalesInvoice = async (accountId: number) => {
 
 // Fetch root account sales invoice by root account ID
 export const fetchRootAccountSalesInvoice = async (rootAccountId: number) => {
-  const response = await fetch(`${BASE_URL}/root-accounts/${rootAccountId}/sales-invoice/`, {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/root-accounts/${rootAccountId}/sales-invoice/`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -36,7 +37,7 @@ export const fetchRootAccountSalesInvoice = async (rootAccountId: number) => {
 
 // Fetch branch account sales invoice by branch account ID
 export const fetchBranchAccountSalesInvoice = async (branchAccountId: number) => {
-  const response = await fetch(`${BASE_URL}/branch-accounts/${branchAccountId}/sales-invoice/`, {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/branch-accounts/${branchAccountId}/sales-invoice/`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
