@@ -19,6 +19,8 @@ services:
     command: ["/app/entrypoint.sh"]  # Custom entrypoint script for migrations and setup
     volumes:
       - ./backend:/app
+      - /var/www/marathon_static:/app/staticfiles  # Bind mount for static files
+      - /var/www/marathon_media:/app/media  # Bind mount for media files (if applicable)
     env_file:
       - ./backend/.env
     ports:
