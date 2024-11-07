@@ -18,5 +18,4 @@ export default defineConfig({
       port: 5173, // Ensure HMR runs on the correct port
     },
   },
-  base: "/marathon/",
 });
