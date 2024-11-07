@@ -11,7 +11,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Initialization SQL for user setup
     networks:
-      - marathon_webnet  # Updated network to match the existing network name
+      - webnet
 
   backend:
     build:
@@ -28,7 +28,7 @@ services:
     depends_on:
       - db
     networks:
-      - marathon_webnet  # Updated network to match the existing network name
+      - webnet
 
   frontend:
     build:
@@ -39,13 +39,13 @@ services:
     depends_on:
       - backend
     networks:
-      - marathon_webnet  # Updated network to match the existing network name
+      - webnet
     volumes:
       - ./frontend:/app
+
 
 volumes:
   postgres_data:
 
 networks:
-  marathon_webnet:  # Changed from 'webnet' to 'marathon_webnet' to match the existing Docker network
-    external: true  # Add this line if the network was already created externally
+  webnet:
