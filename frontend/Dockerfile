@@ -7,6 +7,7 @@ COPY . .
 RUN npm run build | tee build.log
 
 FROM nginx:alpine
+COPY --from=builder /app/build.log /app/build.log
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
