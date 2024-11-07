@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-RUN npm run build | tee build.log
+RUN npm run build > build.log 2>&1
 
 FROM nginx:alpine
 COPY --from=builder /app/build.log /app/build.log
