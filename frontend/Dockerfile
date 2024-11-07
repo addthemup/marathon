@@ -6,7 +6,6 @@ RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build | tee build.log
 
-
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 
