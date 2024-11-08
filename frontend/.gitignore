@@ -28,3 +28,13 @@ dist-ssr
 
 
 /frontend/.env
+
+
+node_modules
+.git
+.dockerignore
+Dockerfile
+package-lock.json
+build.log
+*.log
+.env
