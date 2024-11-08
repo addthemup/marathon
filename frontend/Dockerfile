@@ -1,24 +1,14 @@
-# Dockerfile for Vite Frontend
-FROM node:18 as builder
-
+# Dockerfile for frontend
+FROM node:18-alpine as builder
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps
+COPY . .
+RUN npm run build > build.log 2>&1
 
-# Copy package files and install dependencies
-COPY package*.json /app/
-RUN npm install
-
-# Copy all files and build the app
-COPY . /app/
-RUN npm run build
-
-# Stage 2: Serve with nginx
-FROM nginx:stable-alpine
-
-# Copy built files from the previous stage
-COPY --from=builder /app/dist /usr/share/nginx/html/marathon
-
-# Copy nginx configuration
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+FROM nginx:alpine
+COPY --from=builder /app/build.log /app/build.log
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

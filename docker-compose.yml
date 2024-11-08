@@ -33,10 +33,17 @@ services:
   frontend:
     build:
       context: ./frontend
-    ports:
-      - "3000:80"
+      dockerfile: Dockerfile  # Dockerfile for building the Vite frontend
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
     networks:
       - webnet
+      ports:
+    - "80:80"  # Expose port 80 to the host
+    volumes:
+      - ./frontend:/app
 
 
 volumes:
