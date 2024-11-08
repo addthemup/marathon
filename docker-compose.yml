@@ -41,7 +41,7 @@ services:
     networks:
       - webnet
     ports:
-    - "80:80"  # Expose port 80 to the host
+    - "8080:80"  # Expose port 80 to the host
     volumes:
       - ./frontend:/app
 
