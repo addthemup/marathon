@@ -1,13 +1,17 @@
-# Dockerfile for frontend
+# Stage 1: Build
 FROM node:18-alpine as builder
 WORKDIR /app
+
+# Copy only package files to install dependencies
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
-COPY . .
-RUN npm run build > build.log 2>&1
 
+# Copy source code separately
+COPY . .  # This is safe now because `node_modules` is already cached
+RUN npm run build
+
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
-COPY --from=builder /app/build.log /app/build.log
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
